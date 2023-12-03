@@ -25,10 +25,14 @@ public interface SaleRepo extends JpaRepository<Sale, Long> {
 
     //    @Query("SELECT i FROM InvoiceSale i WHERE i.invoiceNumber = :invoiceNumber")
 //    List<Sale> findByInvoiceNumber(@Param("invoiceNumber")String invoiceNumber);
-    @Query("SELECT i FROM InvoiceSale i WHERE i.month = :month AND i.year = :year ")
+    @Query("SELECT i FROM Sale i WHERE i.month = :month AND i.year = :year ")
     List<Sale> findByMonthAndYear(@Param("month") Month month, @Param("year") Year year, Sort sort);
-    @Query("SELECT i FROM InvoiceSale i WHERE i.day = :day AND i.month = :month ")
+    @Query("SELECT i FROM Sale i WHERE i.day = :day AND i.month = :month ")
     List<Sale> findByDayAndMonth(@Param("day") int day,@Param("month") Month month,Sort sort);
+    @Query("SELECT i FROM Sale i WHERE i.month = ?1 ")
+    List<Sale>findByMonth(Month month);
+    @Query("SELECT i FROM Sale i WHERE i.day = ?1 ")
+    List<Sale>findByDay(int day);
 
 
 }

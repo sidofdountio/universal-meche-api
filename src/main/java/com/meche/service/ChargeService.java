@@ -36,6 +36,11 @@ public class ChargeService implements ChargeDAO {
     }
 
     @Override
+    public Charge getCharge(Long id) {
+        return chargeRepo.findById(id).orElseThrow();
+    }
+
+    @Override
     public void delete(Long id) {
         chargeRepo.deleteById(id);
     }

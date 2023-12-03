@@ -35,7 +35,7 @@ public class Product {
     @Column(nullable = true)
     private String color;
     @Column(nullable = true)
-    private int length;
+    private double length;
     @Column(nullable = true)
     private double salePrice;
     @Column(nullable = true)
@@ -52,7 +52,7 @@ public class Product {
     private Sale sale;
     @OneToOne(mappedBy = "product")
     private Stock stock;
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     @JoinColumn(name = "product_category_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "product_category"))
     private ProductCategory productCategory;

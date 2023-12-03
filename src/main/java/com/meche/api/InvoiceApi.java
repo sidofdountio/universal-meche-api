@@ -30,10 +30,10 @@ public class InvoiceApi {
     /**
      * By invoice number without passed parameter
      */
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<InvoiceSale>> getInvoiceNumber() throws InterruptedException {
         List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber();
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.SECONDS.sleep(2);
         return new ResponseEntity<List<InvoiceSale>>(byInvoiceNumber, OK);
     }
 
@@ -41,9 +41,9 @@ public class InvoiceApi {
      * By invoice number.
      */
     @GetMapping("/{invoiceNumber}")
-    public ResponseEntity<List<InvoiceSale>> getInvoiceNumber(@PathVariable("invoiceNumber") String invoiceNumber)
+    public ResponseEntity<List<InvoiceSale>> getInvoiceNumber(@PathVariable("invoiceNumber") String invoicenumber)
             throws InterruptedException {
-        List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber(invoiceNumber);
+        List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber(invoicenumber);
         TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<List<InvoiceSale>>(byInvoiceNumber, OK);
     }
@@ -73,17 +73,5 @@ public class InvoiceApi {
     }
 
 
-    @GetMapping("/invoices")
-    public ResponseEntity<List<InvoiceSale>> getInvoiceSales() throws InterruptedException {
-        final List<InvoiceSale> invoiceSales = invoiceSaleService.getInvoiceSales();
-        return new ResponseEntity<List<InvoiceSale>>(invoiceSales, OK);
-    }
-
-    @GetMapping("/sale/{saleId}")
-    public ResponseEntity<List<InvoiceSale>> getInvoiceSaleById(@PathVariable("saleId") Long saleId) throws InterruptedException {
-        final List<InvoiceSale> invoiceSaleBySaleId = invoiceSaleService.getInvoicesSaleBySaleId(saleId);
-        TimeUnit.SECONDS.sleep(1);
-        return new ResponseEntity<List<InvoiceSale>>(invoiceSaleBySaleId, OK);
-    }
 
 }

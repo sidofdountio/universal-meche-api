@@ -21,4 +21,8 @@ public class AnotherChargeService {
     public AnotherCharge save(AnotherCharge anotherCharge) {
         return anotherChargeRepo.save(anotherCharge);
     }
+
+    public AnotherCharge anotherCharge(Long id){
+        return anotherChargeRepo.findById(id).orElseThrow();
+    }
 }

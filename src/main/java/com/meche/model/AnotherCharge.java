@@ -3,6 +3,7 @@ package com.meche.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class AnotherCharge {
     @Id
     @SequenceGenerator(name = "sequence_id_another_charge",allocationSize = 1,sequenceName = "sequence_id_another_charge") @GeneratedValue(strategy = SEQUENCE,generator = "sequence_id_another_charge")

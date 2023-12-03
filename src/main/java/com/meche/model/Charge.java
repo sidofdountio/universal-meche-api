@@ -20,7 +20,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @Builder
 @Entity
-
 public class Charge {
     @Id
     @SequenceGenerator(name = "sequence_id_charge",
@@ -33,9 +32,9 @@ public class Charge {
     private double impot;
     private double  electricity;
     private double  loyer;
-    private double  transaport;
+    private double  transport;
     private double  ration;
-    @ManyToOne(fetch =  FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "another_charge_id",
             referencedColumnName = "id",nullable = true)
     private AnotherCharge anotherCharge;

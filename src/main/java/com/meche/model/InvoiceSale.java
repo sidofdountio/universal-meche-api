@@ -11,7 +11,9 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 /**
@@ -20,11 +22,11 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
  * @Version v1.0
  * @YouTube @sidof8065
  */
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Builder
 public class InvoiceSale {
     @Id
     @SequenceGenerator(name = "sequence_id_invoice", allocationSize = 1, sequenceName = "sequence_id_invoice")
@@ -35,6 +37,7 @@ public class InvoiceSale {
     private double subTotal;
     private double tax;
     private double total;
+    @Column(nullable = false)
     private String invoiceNumber;
     private LocalDate createAt;
     private int day;
@@ -44,6 +47,9 @@ public class InvoiceSale {
     @JoinColumn(name = "sale_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "invoice_sale"))
     private Sale sale;
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "invoice_custorme"))
+    @JoinColumn(name = "customer_id",
+            nullable = true,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "invoice_custorme"))
     private Customer customer;
 }

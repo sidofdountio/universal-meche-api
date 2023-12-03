@@ -18,6 +18,6 @@ public interface StockManager {
      * Will be provide by the owner or mananer.
      *
      * */
-    Inventory cmupForPurchase(String label, Purchase purchase, List<Inventory> inventoryList);
+    Inventory cmupForPurchase(String label, Purchase purchase);
     List<Inventory>  cmupForSale(String label, List<Sale> sales, List<Inventory> inventoryList);
 }

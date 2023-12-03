@@ -13,10 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.Year;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.meche.model.enume.Status.PAID;
 import static com.meche.model.enume.Status.PENDING;
-import static com.meche.model.enume.TransactionType.PURCHASE;
 import static com.meche.model.enume.TransactionType.SALE;
 import static java.time.LocalDateTime.now;
 import static org.springframework.http.HttpStatus.*;
@@ -41,16 +37,16 @@ import static org.springframework.http.HttpStatus.*;
 @Transactional
 public class SaleApi {
     private final SaleService saleService;
-    private final InventoryService inventoryService;
     private final ProductService productService;
     private final InventoryOperation inventoryOperation;
     private final InvoiceSaleService invoiceSaleService;
     private final TransactionService transactionService;
-
+    private final InventoryService inventoryService;
 
     @GetMapping
-    public ResponseEntity<List<Sale>> getSales() {
+    public ResponseEntity<List<Sale>> getSales() throws InterruptedException {
         final List<Sale> sales = saleService.SALES();
+        TimeUnit.SECONDS.sleep(3);
         return new ResponseEntity<List<Sale>>(sales, OK);
     }
 
@@ -60,14 +56,12 @@ public class SaleApi {
         TimeUnit.SECONDS.sleep(1);
         return ResponseEntity.ok(sale);
     }
-
-
     /**
      * By Month and Year parameter
      */
     @GetMapping("/month/{month}/{year}")
-    public ResponseEntity<List<Sale>> getInvoiceByMonthAndYear(
-            @PathVariable("month") Month month, @PathVariable("year")Year year)
+    public ResponseEntity<List<Sale>> getSaleByMonthAndYear(
+            @PathVariable("month") Month month, @PathVariable("year") Year year)
             throws InterruptedException {
         List<Sale> byMonthAndYear = saleService.findByMonthAndYear(month, year, Sort.by("month", "year"));
         TimeUnit.SECONDS.sleep(1);
@@ -78,8 +72,8 @@ public class SaleApi {
      * By Day and Month parameters.
      */
     @GetMapping("/day/{day}/{month}")
-    public ResponseEntity<List<Sale>> getInvoiceByDayAndMonth(
-            @PathVariable("day")int day,@PathVariable ("month") Month month)
+    public ResponseEntity<List<Sale>> getSaleByDayAndMonth(
+            @PathVariable("day") int day, @PathVariable("month") Month month)
             throws InterruptedException {
         List<Sale> byDayAndMonth = saleService.findByDayAndMonth(day, month, Sort.by("day", "month"));
         TimeUnit.SECONDS.sleep(1);
@@ -87,59 +81,95 @@ public class SaleApi {
     }
 
     @PutMapping("/validSale")
-    public ResponseEntity<Sale> ValidSale(@RequestBody Sale saleToValid)
-            throws InterruptedException {
+    public ResponseEntity<Sale> ValidSale(@RequestBody Sale saleToValid) throws InterruptedException {
         Sale saleById = saleService.getSale(saleToValid.getId());
-        if (saleById == null){
+        if (saleById == null) {
             return new ResponseEntity<>(NOT_FOUND);
         }
         saleToValid.setStatus(PAID);
         Sale validSale = saleService.updateSale(saleToValid);
-        return new ResponseEntity<>(validSale,CREATED);
+        TimeUnit.SECONDS.sleep(2);
+        return new ResponseEntity<>(validSale, CREATED);
     }
 
-    @PostMapping("/addSale")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void>delete(@PathVariable("id")Long id){
+        saleService.deleteSale(id);
+        return new ResponseEntity<>(NO_CONTENT);
+    }
+
+    @PostMapping
     public ResponseEntity<List<Sale>> addSale(@RequestBody List<Sale> saleToSave) throws InterruptedException {
         double total = 0;
-
         List<InvoiceSale> invoiceSales = new ArrayList<>();
-        final List<Inventory> inventoryList = inventoryService.INVENTORIES();
+        final List<Inventory> inventoryList = inventoryService.INVENTORY_LIST();
         final List<Inventory> cmupForSale = inventoryOperation.cmupForSale("SALE", saleToSave, inventoryList);
-
         if (cmupForSale == null) {
             throw new NullPointerException("error");
         }
-
-        for ( Sale sale: saleToSave) {
+//        TODO: I will update this code soon.
+//        calcul the amount of transaction.
+        for (Sale sale : saleToSave) {
             total += sale.getAmount();
         }
-        var transaction = Transaction.builder()
-                .amount(total)
-                .id(null)
-                .timestamp(LocalDateTime.now())
-                .type(SALE)
-                .sender(saleToSave.get(1).getCustomer().getName())
-                .receiver("UNIVERSAL MECHE")
-                .trsansactionId(Utils.generateTransactionId())
-                .build();
-        Transaction transactionSaved = transactionService.save(transaction);
+//        Fill and save Transaction.
+        Transaction transactionSaved = saveTransaction(saleToSave, total);
+//           Fil and save Sale.
         for (Sale sale : saleToSave) {
             sale.setCreateAt(now());
             sale.setStatus(PENDING);
-            sale.setDay(new Date().getDay());
+            sale.setDay(LocalDate.now().getDayOfMonth());
             sale.setMonth(LocalDate.now().getMonth());
             sale.setYear(Year.now());
             sale.setTransaction(transactionSaved);
         }
 //        saved inventory.
-        inventoryService.addInventoryForSale(cmupForSale);
+        inventoryService.saveSaleInventory(cmupForSale);
 //        saved sale
-        final List<Sale> saleSaved = saleService.addSale(saleToSave);
+        final List<Sale> saleSaved = saleService.saveSale(saleToSave);
+        saveInvoiceSale(saleSaved, total, invoiceSales);
+        TimeUnit.SECONDS.sleep(2);
+        return new ResponseEntity<>(saleSaved, CREATED);
+    }
 
+    /***/
+    @GetMapping("/month")
+    public ResponseEntity<List<Sale>> getSaleByMonth()
+            throws InterruptedException {
+        MonthDay.now();
+        List<Sale> byMonth = saleService.findByMonth(LocalDate.now().getMonth());
+        return new ResponseEntity<List<Sale>>(byMonth, OK);
+    }
+
+    @GetMapping("/day")
+    public ResponseEntity<List<Sale>> getSaleByDay()
+            throws InterruptedException {
+        System.out.println(LocalDate.now().getDayOfMonth());
+        List<Sale> byDay = saleService.findByDay(LocalDate.now().getDayOfMonth());
+        return new ResponseEntity<List<Sale>>(byDay, OK);
+    }
+
+
+    private Transaction saveTransaction(List<Sale> saleToSave, double total) {
+        var transaction = Transaction.builder()
+                .amount(total)
+                .id(null)
+                .timestamp(LocalDateTime.now())
+                .type(SALE)
+                .sender(saleToSave.get(0).getCustomer().getName())
+                .receiver("UNIVERSAL MECHE")
+                .trsansactionId(Utils.generateTransactionId())
+                .build();
+        Transaction transactionSaved = transactionService.save(transaction);
+        return transactionSaved;
+    }
+
+    private void saveInvoiceSale(List<Sale> saleSaved, double total, List<InvoiceSale> invoiceSales) {
         String invoiceNumber = Utils.generateInvoiceNumber();
-//  Set invoice sale properties.
+        int invoiceTotal = 0;
+//  Fil invoice  properties and save.
         for (Sale sale : saleSaved) {
-            total += sale.getAmount();
+            invoiceTotal += sale.getAmount();
             var invoiceSale = InvoiceSale.builder()
                     .sale(sale)
                     .customer(sale.getCustomer())
@@ -157,7 +187,5 @@ public class SaleApi {
         }
 //        saved invoice
         invoiceSaleService.addInvoiceSale(invoiceSales);
-        TimeUnit.SECONDS.sleep(1);
-        return new ResponseEntity<>(saleSaved, CREATED);
     }
 }

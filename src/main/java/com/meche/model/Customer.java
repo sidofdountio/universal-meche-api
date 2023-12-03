@@ -29,7 +29,7 @@ public class Customer {
     private String name;
     @Column(unique = true,nullable = true)
     private String email;
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private String phone;
     private String  address;
     @JsonIgnore

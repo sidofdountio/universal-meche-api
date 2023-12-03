@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -26,17 +27,14 @@ public class CategoryTypeAPi {
 
     @GetMapping
     public ResponseEntity< List<CategoryType>> getAllCategoryTypes() {
-        return new ResponseEntity<>(categoryTypeService.getCategoryList(), OK);
+        List<CategoryType> categoryList = categoryTypeService.getCategoryList();
+        return new ResponseEntity<List<CategoryType>>(categoryList, OK);
     }
 
     @PostMapping
-    public ResponseEntity<CategoryType> createCategoryType(@RequestBody CategoryType categoryType) {
-        try {
-            CategoryType savedCategoryType = categoryTypeService.save(categoryType);
-            return ResponseEntity.status(CREATED).body(savedCategoryType);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<CategoryType> createCategoryType(@RequestBody CategoryType categoryType) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        return new ResponseEntity<>(categoryTypeService.save(categoryType),CREATED);
     }
 
     @DeleteMapping("/{id}")

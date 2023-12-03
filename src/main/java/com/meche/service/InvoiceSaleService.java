@@ -62,13 +62,13 @@ public class InvoiceSaleService implements InvoiceSaleDao {
     @Override
     public List<InvoiceSale> findByInvoiceNumber() {
         log.info("Fectching Invoice Sale By Invoice number .");
-        return invoiceSaleRepo.findByInvoiceNumber();
+        return invoiceSaleRepo.findDistinctInvoiceNumber();
     }
 
     @Override
-    public List<InvoiceSale> findByInvoiceNumber(String invoiceNumber) {
-        log.info("Fectching Invoice Sale By Invoice number {} .", invoiceNumber);
-        return invoiceSaleRepo.findByInvoiceNumber(invoiceNumber);
+    public List<InvoiceSale> findByInvoiceNumber(String invoicenumber) {
+        log.info("Fectching Invoice Sale By Invoice number {} .", invoicenumber);
+        return invoiceSaleRepo.findByInvoiceNumber(invoicenumber);
     }
 
     @Override

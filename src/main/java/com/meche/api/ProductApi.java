@@ -28,6 +28,7 @@ public class ProductApi {
     @GetMapping
     public ResponseEntity<List<Product>> getProducts() {
         final List<Product> products = productService.getProducts();
+
         return new ResponseEntity<>(products, OK);
     }
 
@@ -46,7 +47,7 @@ public class ProductApi {
 
     @PutMapping
     public ResponseEntity<Product> editeProduct(@RequestBody Product productToEdite) {
-        return new ResponseEntity<>(productService.updateProduct(productToEdite), CREATED);
+        return new ResponseEntity<>(productService.updateProduct(productToEdite), OK);
     }
 
     @DeleteMapping("/{id}")
