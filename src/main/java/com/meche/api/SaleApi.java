@@ -2,10 +2,7 @@ package com.meche.api;
 
 import com.meche.api.operation.InventoryOperation;
 import com.meche.api.operation.Utils;
-import com.meche.model.Inventory;
-import com.meche.model.InvoiceSale;
-import com.meche.model.Sale;
-import com.meche.model.Transaction;
+import com.meche.model.*;
 import com.meche.service.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +39,7 @@ public class SaleApi {
     private final InvoiceSaleService invoiceSaleService;
     private final TransactionService transactionService;
     private final InventoryService inventoryService;
+    private final CustomerService customerService;
 
     @GetMapping
     public ResponseEntity<List<Sale>> getSales() throws InterruptedException {
@@ -107,14 +105,17 @@ public class SaleApi {
         if (cmupForSale == null) {
             throw new NullPointerException("error");
         }
+        Customer customerById = customerService.getCustomerById(saleToSave.get(0).getCustomer().getId());
 //        TODO: I will update this code soon.
 //        calcul the amount of transaction.
         for (Sale sale : saleToSave) {
             total += sale.getAmount();
         }
 //        Fill and save Transaction.
-        Transaction transactionSaved = saveTransaction(saleToSave, total);
-//           Fil and save Sale.
+        Transaction transactionSaved = saveTransaction(saleToSave, total,customerById);
+//        save inventory.
+        List<Inventory> inventoriesSaved = inventoryService.saveSaleInventory(cmupForSale);
+//        Fil and save Sale.
         for (Sale sale : saleToSave) {
             sale.setCreateAt(now());
             sale.setStatus(PENDING);
@@ -123,8 +124,6 @@ public class SaleApi {
             sale.setYear(Year.now());
             sale.setTransaction(transactionSaved);
         }
-//        saved inventory.
-        inventoryService.saveSaleInventory(cmupForSale);
 //        saved sale
         final List<Sale> saleSaved = saleService.saveSale(saleToSave);
         saveInvoiceSale(saleSaved, total, invoiceSales);
@@ -136,7 +135,6 @@ public class SaleApi {
     @GetMapping("/month")
     public ResponseEntity<List<Sale>> getSaleByMonth()
             throws InterruptedException {
-        MonthDay.now();
         List<Sale> byMonth = saleService.findByMonth(LocalDate.now().getMonth());
         return new ResponseEntity<List<Sale>>(byMonth, OK);
     }
@@ -144,19 +142,18 @@ public class SaleApi {
     @GetMapping("/day")
     public ResponseEntity<List<Sale>> getSaleByDay()
             throws InterruptedException {
-        System.out.println(LocalDate.now().getDayOfMonth());
         List<Sale> byDay = saleService.findByDay(LocalDate.now().getDayOfMonth());
         return new ResponseEntity<List<Sale>>(byDay, OK);
     }
 
 
-    private Transaction saveTransaction(List<Sale> saleToSave, double total) {
+    private Transaction saveTransaction(List<Sale> saleToSave, double total,Customer customer) {
         var transaction = Transaction.builder()
                 .amount(total)
                 .id(null)
                 .timestamp(LocalDateTime.now())
                 .type(SALE)
-                .sender(saleToSave.get(0).getCustomer().getName())
+                .sender(customer.getName())
                 .receiver("UNIVERSAL MECHE")
                 .trsansactionId(Utils.generateTransactionId())
                 .build();

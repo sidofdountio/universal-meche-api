@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
@@ -56,6 +57,12 @@ public class PurchaseAPI {
         return new ResponseEntity<>(purchases, OK);
     }
 
+    @GetMapping("/month")
+    public ResponseEntity<List<Purchase>> getPurchasesPerMonth()
+            throws InterruptedException {
+        List<Purchase> byMonth = purchaseService.findByMonth(now().getMonth());
+        return new ResponseEntity<>(byMonth,OK);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Purchase> getPurchase(@PathVariable("id") Long id) {
         return new ResponseEntity<Purchase>(purchaseService.getPurchase(id), OK);
@@ -76,18 +83,18 @@ public class PurchaseAPI {
      * The returned value (0 = Sunday, 1 = Monday, 2 = Tuesday,
      * 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday)
      */
+    @Transactional
     @PostMapping
     public ResponseEntity<Purchase> savePurchase(@RequestBody Purchase purchaseToSave) throws InterruptedException {
         purchaseToSave.setPurchaseAt(now());
         purchaseToSave.setYear(Year.now());
         purchaseToSave.setMonth(now().getMonth());
-        purchaseToSave.setDay(new Date().getDay());
+        purchaseToSave.setDay(LocalDate.now().getDayOfMonth());
         purchaseToSave.setStatus(PENDING);
         final int quantity = purchaseToSave.getQuantity();
         final double price = purchaseToSave.getPrice();
         final double amount = (double) quantity * price;
         purchaseToSave.setAmount(amount);
-
 
         var transaction =new  Transaction(
                 null,
@@ -105,19 +112,23 @@ public class PurchaseAPI {
         Purchase purchaseSaved = purchaseService.addPurchase(purchaseToSave);
         final Inventory inventorySave = inventoryOperation.cmupForPurchase("PURCHASE", purchaseSaved);
         inventoryService.saveInventory(inventorySave);
-//      OPTIONAL
+/**      Update the sale price of product after purchase the produc*/
         Product purchaseSavedProduct = purchaseSaved.getProduct();
         purchaseSavedProduct.setSalePrice(purchaseSaved.getSalePrice());
+        List<Product> products = productService.getProducts();
+        for (Product p:products) {
+            if(p.getId() == purchaseSavedProduct.getId()){
+                p.setSalePrice(purchaseSaved.getSalePrice());
+            }
+        }
 //        updateSalePrice(purchaseSavedProduct);
         TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<Purchase>(purchaseSaved, CREATED);
     }
 
-    @PutMapping("/updateSalePrice")
-    private void updateSalePrice(@RequestBody Product purchaseSavedProduct) {
+    private void updateSalePrice(Product purchaseSavedProduct) {
         productService.updateProduct(purchaseSavedProduct);
     }
-
 
 }
 

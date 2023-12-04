@@ -55,7 +55,6 @@ public class Sale {
     @JoinColumn(name = "transaction_id",referencedColumnName = "id",foreignKey =@ForeignKey(name = "transaction_sale") )
     private Transaction transaction;
     @JsonIgnore
-//    @OneToMany(mappedBy = "sale",orphanRemoval = true,cascade = REMOVE)
     @OneToMany(mappedBy = "sale")
     private List<InvoiceSale> invoiceSales = new ArrayList<>();
 

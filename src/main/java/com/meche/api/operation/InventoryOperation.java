@@ -187,7 +187,7 @@ public class InventoryOperation implements StockManager {
                     newPrice = stockInventoty.getNewPrice();//ancien prix calcule apres achat.
                     oldAmount = quantityProvideByUser * newPrice; // prix calcule
                     newQuantity = stockInventoty.getNewQuantity();
-                    newAmount = stockInventoty.getNewAmount() - oldAmount;
+                    newAmount = quantityProvideByUser * newPrice;
                     quantity = newQuantity - quantityProvideByUser;
                     inventoryToAdd.setLabel(label);
                     inventoryToAdd.setOrldQuantity(quantityProvideByUser);
