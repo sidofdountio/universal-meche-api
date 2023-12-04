@@ -1,5 +1,6 @@
 package com.meche.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.meche.model.enume.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 /**
@@ -24,8 +26,8 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Builder
+@Entity
 public class Sale {
     @Id
     @SequenceGenerator(name = "sequence_id_sale", allocationSize = 1, sequenceName = "sequence_id_sale")
@@ -39,16 +41,21 @@ public class Sale {
     private int day;
     private Month month;
     private Year year;
+    private String paymentType;
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id",foreignKey = @ForeignKey(name = "customer_sale"))
+    @JoinColumn(name = "customer_id",
+            nullable = true,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "customer_sale"))
     private Customer customer;
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id",foreignKey = @ForeignKey(name = "product_sale"))
     private Product product;
     @ManyToOne()
     @JoinColumn(name = "transaction_id",referencedColumnName = "id",foreignKey =@ForeignKey(name = "transaction_sale") )
     private Transaction transaction;
-    @OneToMany
+    @JsonIgnore
+    @OneToMany(mappedBy = "sale")
     private List<InvoiceSale> invoiceSales = new ArrayList<>();
 
 }

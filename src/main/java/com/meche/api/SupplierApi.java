@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 /**
  * @Author sidof
@@ -35,5 +34,15 @@ public class SupplierApi {
     public ResponseEntity<Supplier> addSupplier(@RequestBody Supplier supplierToVave) {
         final Supplier supplier = supplierService.addSupplier(supplierToVave);
         return new ResponseEntity<>(supplier, CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id")Long id) {
+        Supplier supplier = supplierService.getSupplier(id);
+        if(supplier == null){
+            return new ResponseEntity<>(NOT_FOUND);
+        }
+        supplierService.deleteSupplier(id);
+        return new ResponseEntity<>(NO_CONTENT);
     }
 }

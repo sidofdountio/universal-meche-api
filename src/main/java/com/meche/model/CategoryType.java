@@ -23,7 +23,11 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Entity
 public class CategoryType {
     @Id
-    @SequenceGenerator(name = "sequence_id_category_type",allocationSize = 1,sequenceName = "sequence_id_category_type") @GeneratedValue(strategy = SEQUENCE,generator = "sequence_id_category_type")
+    @SequenceGenerator(name = "sequence_id_category_type",
+            allocationSize = 1,
+            sequenceName = "sequence_id_category_type")
+    @GeneratedValue(strategy = SEQUENCE,
+            generator = "sequence_id_category_type")
     private Long id;
     private String name;
     @JsonIgnore

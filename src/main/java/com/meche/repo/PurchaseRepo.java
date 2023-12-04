@@ -2,6 +2,10 @@ package com.meche.repo;
 
 import com.meche.model.Purchase;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.time.Month;
+import java.util.List;
 
 /**
  * @Author sidof
@@ -9,4 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 
 public interface PurchaseRepo extends JpaRepository<Purchase, Long> {
+    List<Purchase>findByMonth(Month month);
 }

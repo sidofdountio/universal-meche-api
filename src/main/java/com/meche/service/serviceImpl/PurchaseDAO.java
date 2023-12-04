@@ -2,6 +2,7 @@ package com.meche.service.serviceImpl;
 
 import com.meche.model.Purchase;
 
+import java.time.Month;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface PurchaseDAO {
     void deletePurchase(Long purchaseIdToDelete);
 
     List<Purchase> PURCHASES();
+
+    List<Purchase>findByMonth(Month month);
 }

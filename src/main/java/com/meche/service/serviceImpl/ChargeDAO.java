@@ -16,6 +16,7 @@ public interface ChargeDAO {
     Charge update(Charge charge);
 
     List<Charge> getCharges();
+    Charge getCharge(Long id);
 
     void delete(Long id);
 

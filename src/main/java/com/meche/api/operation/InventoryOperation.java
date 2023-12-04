@@ -9,6 +9,7 @@ import com.meche.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,6 +38,9 @@ public class InventoryOperation implements StockManager {
     private final InventoryService inventoryService;
 
     /**
+     * In this project the new price (That correspond for sale price)
+     * Will be provide by the owner or mananer.
+     * <p>
      * We check up product on our stock.
      * Up product its doeat who have been save laters(Purchase and sale)
      * and the quantity still great thant O.
@@ -44,9 +48,11 @@ public class InventoryOperation implements StockManager {
      * In this case the newPrice attribute  will provider.
      */
     @Override
-    public Inventory cmupForPurchase(String label, Purchase purchase, List<Inventory> inventoryList) {
+    public Inventory cmupForPurchase(String label, Purchase purchase) {
+
+        List<Inventory> inventoryList = inventoryService.INVENTORY_LIST();
         final Product productById = productService.getProductById(purchase.getProduct().getId());
-        int day = (new Date().getDay());
+        int day = LocalDate.now().getDayOfMonth();
         Month month = LocalDate.now().getMonth();
         Year year = Year.now();
         final int quantity = purchase.getQuantity();
@@ -137,7 +143,7 @@ public class InventoryOperation implements StockManager {
 
     @Override
     public List<Inventory> cmupForSale(String label, List<Sale> sales, List<Inventory> inventoryList) {
-        int day = (new Date().getDay());
+        int day = LocalDate.now().getDayOfMonth();
         Month month = LocalDate.now().getMonth();
         Year year = Year.now();
         List<Inventory> inventoryToCMUSale = new ArrayList<>();
@@ -153,7 +159,6 @@ public class InventoryOperation implements StockManager {
 //      SOME OPERATION (CMUP) Cout Moyen Unitaire Pondere.
         int quantity = 0;
         double amount = 0;
-//      Get the product name on product passed by user.
 //      Quantity provider by user.
         int quantityProvideByUser = 0;
         Long productId = 0L;
@@ -166,14 +171,15 @@ public class InventoryOperation implements StockManager {
 
 //      Set Sale properties.
         for (Sale sale : sales) {
+//            Object
             Inventory inventoryToAdd = new Inventory();
             quantityProvideByUser = sale.getQuantity();
-            productId = sale.getProduct().getId();
+
             productName = sale.getProduct().getName();
             for (Inventory stockInventoty : inventoryList) {
 //            stock product.
                 if (stockInventoty.getNewQuantity() < quantityProvideByUser && stockInventoty.isUp()) {
-                    throw new IllegalStateException("Quantity in store is less thant provider");
+                    throw new IllegalStateException("Quantity in store it's less thant provider");
                 }
                 if (productName.equalsIgnoreCase(stockInventoty.getProductName()) && stockInventoty.isUp()) {
 //                  We manage only product that is up.
@@ -181,7 +187,7 @@ public class InventoryOperation implements StockManager {
                     newPrice = stockInventoty.getNewPrice();//ancien prix calcule apres achat.
                     oldAmount = quantityProvideByUser * newPrice; // prix calcule
                     newQuantity = stockInventoty.getNewQuantity();
-                    newAmount = stockInventoty.getNewAmount() - oldAmount;
+                    newAmount = quantityProvideByUser * newPrice;
                     quantity = newQuantity - quantityProvideByUser;
                     inventoryToAdd.setLabel(label);
                     inventoryToAdd.setOrldQuantity(quantityProvideByUser);
@@ -196,10 +202,12 @@ public class InventoryOperation implements StockManager {
                     inventoryToAdd.setYear(year);
                     inventoryToAdd.setMonth(month);
                     inventoryToAdd.setDay(day);
-                    inventoryToAdd.setUp(true);
 
+                    inventoryToAdd.setUp(true);
+//                  Turn the position of last product to false
                     stockInventoty.setUp(false);
 //                    Update change of inventory after seller.
+//                    Save the change mind save the new quantity that reduice
                     inventoryService.updateInventory(stockInventoty);
                     break;
                 }

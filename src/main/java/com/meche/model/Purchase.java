@@ -12,6 +12,7 @@ import java.time.Month;
 import java.time.Year;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -46,8 +47,11 @@ public class Purchase {
     @ManyToOne
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "sale_purchase"))
     private Supplier supplier;
+//    @ManyToOne(cascade = DETACH)
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "product_purchase"))
+    @JoinColumn(name = "product_id",
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "product_purchase"))
     private Product product;
     @ManyToOne
     @JoinColumn(name = "transaction_id",referencedColumnName = "id",foreignKey =@ForeignKey(name = "transaction_sale") )

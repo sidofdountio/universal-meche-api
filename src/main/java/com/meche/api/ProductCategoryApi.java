@@ -3,11 +3,11 @@ package com.meche.api;
 import com.meche.model.ProductCategory;
 import com.meche.service.ProductCategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -31,11 +31,20 @@ public class ProductCategoryApi {
     }
 
     @PostMapping
-    public ResponseEntity<ProductCategory> createProductCategory(@RequestBody ProductCategory productCategory) {
+    public ResponseEntity<ProductCategory> createProductCategory(@RequestBody ProductCategory productCategory)
+            throws InterruptedException {
         try {
+            if (productCategory.getCategoryType().getId() == null) {
+                var categori = ProductCategory.builder()
+                        .name(productCategory.getName())
+                        .categoryType(null)
+                        .build();
+                return new ResponseEntity(productCategoryService.save(categori), CREATED);
+            }
             ProductCategory savedProductCategory = productCategoryService.save(productCategory);
-            return ResponseEntity.status(CREATED).body(savedProductCategory);
+            return new ResponseEntity(savedProductCategory, CREATED);
         } catch (IllegalStateException e) {
+            TimeUnit.SECONDS.sleep(1);
             return ResponseEntity.badRequest().build();
         }
     }

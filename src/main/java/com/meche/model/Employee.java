@@ -28,9 +28,9 @@ public class Employee {
     private String firstName;
     private String lastName;
     @Column(unique = true)
-    private int phone;
+    private String phone;
     private String address;
     private LocalDate birthDay;
-    private String sex;
+    private String sexe;
     private double salary;
 }
