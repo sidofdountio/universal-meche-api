@@ -39,6 +39,7 @@ public class Sale {
     private int day;
     private Month month;
     private Year year;
+    private String paymentType;
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id",foreignKey = @ForeignKey(name = "customer_sale"))
     private Customer customer;

@@ -1,0 +1,1 @@
+ENV_FILE=./.env.test docker compose -d --build

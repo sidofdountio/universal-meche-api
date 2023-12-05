@@ -2,8 +2,8 @@ package com.meche.service;
 
 import com.meche.model.Inventory;
 import com.meche.model.InvoiceSale;
-import com.sidof.repo.InventoryRepo;
-import com.sidof.service.interfaceService.InventoryDao;
+import com.meche.repo.InventoryRepo;
+import com.meche.service.serviceImpl.InventoryDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +26,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class InventoryService implements InventoryDao {
 
-    private InventoryRepo inventoryRepo;
+    private  final InventoryRepo inventoryRepo;
 
-    public InventoryService(InventoryRepo inventoryRepo) {
-        this.inventoryRepo = inventoryRepo;
+    @Override
+    public Inventory addInventory(Inventory inventoryTosave) {
+        return inventoryRepo.save(inventoryTosave);
+    }
+
+    @Override
+    public List<Inventory> INVENTORY_LIST() {
+        return inventoryRepo.findAll();
+    }
+
+    @Override
+    public List<Inventory> saveSaleInventory(List<Inventory> inventories) {
+        return inventoryRepo.saveAll(inventories);
     }
 
     @Override
@@ -39,7 +50,7 @@ public class InventoryService implements InventoryDao {
     }
 
     @Override
-    public Inventory addInventory(Inventory inventory) {
+    public Inventory saveInventory(Inventory inventory) {
         return inventoryRepo.save(inventory);
     }
 

@@ -26,7 +26,7 @@ public class CategoryType {
     @SequenceGenerator(name = "sequence_id_category_type",allocationSize = 1,sequenceName = "sequence_id_category_type") @GeneratedValue(strategy = SEQUENCE,generator = "sequence_id_category_type")
     private Long id;
     private String name;
-    @JsonIgnore
-    @OneToMany(mappedBy = "categoryType")
-    private List<ProductCategory>productCategories=new ArrayList<>();
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "categoryType")
+//    private List<ProductCategory>productCategories=new ArrayList<>();
 }

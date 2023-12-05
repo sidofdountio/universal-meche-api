@@ -1,4 +1,4 @@
-package com.sidof.service.interfaceService;
+package com.meche.service.serviceImpl;
 
 import com.meche.model.InvoiceSale;
 import org.springframework.data.domain.Sort;
@@ -25,7 +25,7 @@ public interface InvoiceSaleDao {
     List<InvoiceSale> addInvoiceSale(List<InvoiceSale> invoiceSales);
 //    UPDATE
 
-    List<InvoiceSale> findByInvoiceNumber();
+
 
     List<InvoiceSale> findByInvoiceNumber(String invoiceNumber);
 

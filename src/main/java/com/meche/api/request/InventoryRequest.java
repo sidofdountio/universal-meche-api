@@ -1,4 +1,4 @@
-package com.sidof.api.request;
+package com.meche.api.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

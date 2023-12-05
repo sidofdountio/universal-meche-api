@@ -2,7 +2,7 @@ package com.meche.service;
 
 import com.meche.model.Product;
 import com.meche.repo.ProductRepo;
-import com.sidof.service.interfaceService.ProductDao;
+import com.meche.service.serviceImpl.ProductDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

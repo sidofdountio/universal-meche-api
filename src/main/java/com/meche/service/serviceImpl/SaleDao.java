@@ -1,4 +1,4 @@
-package com.sidof.service.interfaceService;
+package com.meche.service.serviceImpl;
 
 import com.meche.model.InvoiceSale;
 import com.meche.model.Sale;
@@ -13,7 +13,7 @@ import java.util.List;
  * @Since 20/05/2023
  */
 public interface SaleDao {
-    List<Sale> addSale(List<Sale> sale);
+    List<Sale> saveSale(List<Sale> sale);
 
     Sale updateSale(Sale sale);
 
@@ -25,4 +25,7 @@ public interface SaleDao {
     List<Sale> findByMonthAndYear(Month month, Year year, Sort sort);
 
     List<Sale> findByDayAndMonth(int day, Month month, Sort sort);
+
+    List<Sale>findByMonth(Month month);
+    List<Sale>findByDay(int day);
 }

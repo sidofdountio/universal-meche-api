@@ -20,7 +20,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Builder
 public class Employee {
     @Id
     @SequenceGenerator(name = "sequence_id_employee",allocationSize = 1,sequenceName = "sequence_id_employee") @GeneratedValue(strategy = SEQUENCE,generator = "sequence_id_employee")

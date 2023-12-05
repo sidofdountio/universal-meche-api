@@ -2,7 +2,7 @@ package com.meche.service;
 
 import com.meche.model.InvoicePurchase;
 import com.meche.repo.InvoicePurchaseRepo;
-import com.sidof.service.interfaceService.InvoicePurchaseDao;
+import com.meche.service.serviceImpl.InvoicePurchaseDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

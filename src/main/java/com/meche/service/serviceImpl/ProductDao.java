@@ -1,4 +1,4 @@
-package com.sidof.service.interfaceService;
+package com.meche.service.serviceImpl;
 
 import com.meche.model.Product;
 

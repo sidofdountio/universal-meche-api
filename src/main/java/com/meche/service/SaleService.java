@@ -2,7 +2,7 @@ package com.meche.service;
 
 import com.meche.model.Sale;
 import com.meche.repo.SaleRepo;
-import com.sidof.service.interfaceService.SaleDao;
+import com.meche.service.serviceImpl.SaleDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class SaleService implements SaleDao {
     private final SaleRepo saleRepo;
 
     @Override
-    public List<Sale> addSale(List<Sale> sale) {
+    public List<Sale> saveSale(List<Sale> sale) {
         log.info("Saved sale {}", sale);
         return saleRepo.saveAll(sale);
     }
@@ -62,5 +62,15 @@ public class SaleService implements SaleDao {
     @Override
     public List<Sale> findByDayAndMonth(int day, Month month, Sort sort) {
         return saleRepo.findByDayAndMonth(day,month,sort.ascending());
+    }
+
+    @Override
+    public List<Sale> findByMonth(Month month) {
+        return saleRepo.findByMonth(month);
+    }
+
+    @Override
+    public List<Sale> findByDay(int day) {
+        return saleRepo.findByDay(day);
     }
 }

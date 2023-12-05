@@ -33,7 +33,7 @@ public class Charge {
     private double impot;
     private double  electricity;
     private double  loyer;
-    private double  transaport;
+    private double  transport;
     private double  ration;
     @ManyToOne(fetch =  FetchType.EAGER)
     @JoinColumn(name = "another_charge_id",

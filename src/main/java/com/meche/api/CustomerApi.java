@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 /**
  * @Author sidof
@@ -32,20 +32,25 @@ public class CustomerApi {
         return new ResponseEntity<>(customers, OK);
     }
 
-    @PostMapping("/addCustomer")
-    public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customerToSave) {
+    @PostMapping
+    public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customerToSave) throws InterruptedException {
         final Customer customer = customerService.addCustomer(customerToSave);
+        TimeUnit.SECONDS.sleep(2);
         return new ResponseEntity<>(customer, CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomer(@PathVariable Long id) {
-       Customer customers = customerService.getCustomerById(id);
+        Customer customers = customerService.getCustomerById(id);
         return new ResponseEntity<>(customers, OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteCustomer(@PathVariable Long id) {
+        Customer customer = customerService.getCustomerById(id);
+        if (customer == null) {
+            return new ResponseEntity<>(NOT_FOUND);
+        }
         customerService.DeleteCustomer(id);
         return ResponseEntity.noContent().build();
     }

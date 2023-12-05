@@ -6,6 +6,7 @@ import com.meche.service.serviceImpl.PurchaseDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Month;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PurchaseService implements PurchaseDAO {
     private final PurchaseRepo purchaseRepo;
+
     @Override
     public Purchase addPurchase(Purchase purchase) {
         return purchaseRepo.save(purchase);
@@ -34,12 +36,13 @@ public class PurchaseService implements PurchaseDAO {
     }
 
     @Override
-    public void deletePurchase(Long purchaseIdToDelete) {
-
-    }
-
-    @Override
     public List<Purchase> PURCHASES() {
         return purchaseRepo.findAll();
     }
+
+    @Override
+    public List<Purchase> findByMonth(Month month) {
+        return purchaseRepo.findByMonth(month);
+    }
 }
+

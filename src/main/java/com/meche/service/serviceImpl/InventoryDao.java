@@ -1,4 +1,4 @@
-package com.sidof.service.interfaceService;
+package com.meche.service.serviceImpl;
 
 import com.meche.model.Inventory;
 
@@ -10,7 +10,9 @@ import java.util.Optional;
  * @Since 20/05/2023
  */
 public interface InventoryDao {
-    Inventory addInventory(Inventory inventory);
+    List<Inventory>INVENTORY_LIST();
+    List<Inventory> saveSaleInventory(List<Inventory> inventories);
+    Inventory saveInventory(Inventory inventory);
 
     List<Inventory> addInventoryForSale(List<Inventory> inventory);
 
@@ -29,4 +31,5 @@ public interface InventoryDao {
     Boolean inventoryById(Long productId);
 
 
+    Inventory addInventory(Inventory inventoryTosave);
 }

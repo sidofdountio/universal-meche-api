@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -24,7 +25,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Builder
 public class InvoiceSale {
     @Id
     @SequenceGenerator(name = "sequence_id_invoice", allocationSize = 1, sequenceName = "sequence_id_invoice")

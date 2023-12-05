@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 public class Product {
     @Id
@@ -35,7 +35,7 @@ public class Product {
     @Column(nullable = true)
     private String color;
     @Column(nullable = true)
-    private int length;
+    private String length;
     @Column(nullable = true)
     private double salePrice;
     @Column(nullable = true)

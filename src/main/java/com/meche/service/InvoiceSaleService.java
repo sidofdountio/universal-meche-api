@@ -2,7 +2,7 @@ package com.meche.service;
 
 import com.meche.model.InvoiceSale;
 import com.meche.repo.InvoiceSaleRepo;
-import com.sidof.service.interfaceService.InvoiceSaleDao;
+import com.meche.service.serviceImpl.InvoiceSaleDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -59,11 +59,7 @@ public class InvoiceSaleService implements InvoiceSaleDao {
     /**
      * NEW aproches to retriving data
      */
-    @Override
-    public List<InvoiceSale> findByInvoiceNumber() {
-        log.info("Fectching Invoice Sale By Invoice number .");
-        return invoiceSaleRepo.findByInvoiceNumber();
-    }
+
 
     @Override
     public List<InvoiceSale> findByInvoiceNumber(String invoiceNumber) {

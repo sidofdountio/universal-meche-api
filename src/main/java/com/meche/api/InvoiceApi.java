@@ -30,10 +30,10 @@ public class InvoiceApi {
     /**
      * By invoice number without passed parameter
      */
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<InvoiceSale>> getInvoiceNumber() throws InterruptedException {
-        List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber();
-        TimeUnit.SECONDS.sleep(1);
+        List<InvoiceSale> byInvoiceNumber = invoiceSaleService.getInvoiceSales();
+        TimeUnit.SECONDS.sleep(2);
         return new ResponseEntity<List<InvoiceSale>>(byInvoiceNumber, OK);
     }
 
@@ -41,9 +41,9 @@ public class InvoiceApi {
      * By invoice number.
      */
     @GetMapping("/{invoiceNumber}")
-    public ResponseEntity<List<InvoiceSale>> getInvoiceNumber(@PathVariable("invoiceNumber") String invoiceNumber)
+    public ResponseEntity<List<InvoiceSale>> getInvoiceNumber(@PathVariable("invoiceNumber") String invoicenumber)
             throws InterruptedException {
-        List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber(invoiceNumber);
+        List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber(invoicenumber);
         TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<List<InvoiceSale>>(byInvoiceNumber, OK);
     }
@@ -53,7 +53,7 @@ public class InvoiceApi {
      */
     @GetMapping("/month/{month}/{year}")
     public ResponseEntity<List<InvoiceSale>> getInvoiceByMonthAndYear(
-            @PathVariable("month") Month month, @PathVariable("year")Year year)
+            @PathVariable("month") Month month, @PathVariable("year") Year year)
             throws InterruptedException {
         List<InvoiceSale> byMonthAndYear = invoiceSaleService.findByMonthAndYear(month, year, Sort.by("month", "year"));
         TimeUnit.SECONDS.sleep(1);
@@ -65,25 +65,12 @@ public class InvoiceApi {
      */
     @GetMapping("/day/{day}/{month}")
     public ResponseEntity<List<InvoiceSale>> getInvoiceByDayAndMonth(
-            @PathVariable("day")int day,@PathVariable ("month") Month month)
+            @PathVariable("day") int day, @PathVariable("month") Month month)
             throws InterruptedException {
         List<InvoiceSale> byDayAndMonth = invoiceSaleService.findByDayAndMonth(day, month, Sort.by("day", "month"));
         TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<List<InvoiceSale>>(byDayAndMonth, OK);
     }
 
-
-    @GetMapping("/invoices")
-    public ResponseEntity<List<InvoiceSale>> getInvoiceSales() throws InterruptedException {
-        final List<InvoiceSale> invoiceSales = invoiceSaleService.getInvoiceSales();
-        return new ResponseEntity<List<InvoiceSale>>(invoiceSales, OK);
-    }
-
-    @GetMapping("/sale/{saleId}")
-    public ResponseEntity<List<InvoiceSale>> getInvoiceSaleById(@PathVariable("saleId") Long saleId) throws InterruptedException {
-        final List<InvoiceSale> invoiceSaleBySaleId = invoiceSaleService.getInvoicesSaleBySaleId(saleId);
-        TimeUnit.SECONDS.sleep(1);
-        return new ResponseEntity<List<InvoiceSale>>(invoiceSaleBySaleId, OK);
-    }
 
 }

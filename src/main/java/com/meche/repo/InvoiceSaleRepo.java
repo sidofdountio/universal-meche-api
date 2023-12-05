@@ -21,8 +21,8 @@ public interface InvoiceSaleRepo extends JpaRepository<InvoiceSale, Long> {
     @Query("SELECT i FROM InvoiceSale i  ORDER BY id ")
     List<InvoiceSale> findAll();
     List<InvoiceSale> findBySaleId(Long saleId);
-    @Query("SELECT DISTINCT invoiceNumber,id FROM InvoiceSale ORDER BY id ")
-    List<InvoiceSale> findByInvoiceNumber();
+//    @Query("SELECT DISTINCT invoiceNumber,id FROM InvoiceSale ORDER BY id ")
+//    List<InvoiceSale> findByInvoiceNumber();
     @Query("SELECT i FROM InvoiceSale i WHERE i.invoiceNumber = :invoiceNumber")
     List<InvoiceSale> findByInvoiceNumber(@Param("invoiceNumber")String invoiceNumber);
     @Query("SELECT i FROM InvoiceSale i WHERE i.month = :month AND i.year = :year ")

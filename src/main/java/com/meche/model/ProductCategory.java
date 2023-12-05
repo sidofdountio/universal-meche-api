@@ -3,6 +3,7 @@ package com.meche.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,7 +30,7 @@ public class ProductCategory {
     @JsonIgnore
     @OneToMany(mappedBy = "productCategory")
     private List<Product> product = new ArrayList<>();
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_type_id",nullable = true,referencedColumnName = "id")
-    private CategoryType categoryType;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "category_type_id",nullable = true,referencedColumnName = "id")
+//    private CategoryType categoryType;
 }

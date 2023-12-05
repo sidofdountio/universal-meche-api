@@ -26,6 +26,11 @@ public class ChargeService implements ChargeDAO {
     }
 
     @Override
+    public Charge getCharge(Long id) {
+        return chargeRepo.findById(id).orElseThrow();
+    }
+
+    @Override
     public Charge update(Charge charge) {
         return chargeRepo.save(charge);
     }

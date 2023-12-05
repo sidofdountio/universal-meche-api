@@ -1,19 +1,47 @@
+version: "3.8"
 services:
-  db:
+  universal_hair_db:
     container_name: universal_hair_db
     image: postgres
-
+    restart: unless-stopped
     environment:
       POSTGRES_USER: sidof
       POSTGRES_PASSWORD: sidof1/@
+      POSTGRES_DB: universal_hair
       PGDATA: /data/postgres
     volumes:
       - db:/data/postgres
     ports:
-      - "5332:5432"
+      - 5433:5432
+    expose:
+      - 5432
     networks:
       - db
+
+  universalhair:
+    depends_on:
+      - universal_hair_db
+    container_name: universalhairapi
+    build:
+      context: .
+      args:
+        CONTAINER_PORT: ${CONTAINER_PORT}
+    image: universalhair:v1
     restart: unless-stopped
+    env_file:
+      - ${ENV_FILE}
+    ports:
+      - ${CONTAINER_PORT}:${HOST_PORT}
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "jdbc:postgresql://universal_hair_db:5432/universal_hair",
+        "spring.datasource.username" : "sidof",
+        "spring.datasource.password" : "sidof1/@",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.PostgreSQLDialect",
+        "spring.jpa.hibernate.ddl-auto" : "create"
+      }'
+    networks:
+      - db
 
 networks:
   db:

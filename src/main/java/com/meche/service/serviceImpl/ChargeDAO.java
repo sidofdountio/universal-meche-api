@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface ChargeDAO {
     Charge save(Charge charge);
+    Charge getCharge(Long id);
 
     Charge update(Charge charge);
 

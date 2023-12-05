@@ -1,4 +1,4 @@
-package com.sidof.repo;
+package com.meche.repo;
 
 import com.meche.model.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;

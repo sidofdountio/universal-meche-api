@@ -30,5 +30,8 @@ public interface SaleRepo extends JpaRepository<Sale, Long> {
     @Query("SELECT i FROM InvoiceSale i WHERE i.day = :day AND i.month = :month ")
     List<Sale> findByDayAndMonth(@Param("day") int day,@Param("month") Month month,Sort sort);
 
+    List<Sale>findByMonth(Month month);
+    List<Sale>findByDay(int day);
+
 
 }
