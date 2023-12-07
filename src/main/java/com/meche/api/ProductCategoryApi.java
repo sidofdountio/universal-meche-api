@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.CREATED;
  */
 @RestController
 @RequestMapping("/api/v1/hair/product-category")
-@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:80"},maxAge = 3600)
 @RequiredArgsConstructor
 public class ProductCategoryApi {
 

@@ -57,6 +57,8 @@ public class ApplicationConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin("http://localhost:80");
+        config.addAllowedHeader("*");
         config.setAllowCredentials(true);
         config.setExposedHeaders(Arrays.asList(ACCEPT,
                 AUTHORIZATION,
@@ -70,7 +72,9 @@ public class ApplicationConfig {
                 CONTENT_TYPE,
                 ORIGIN,
                 ACCESS_CONTROL_ALLOW_ORIGIN,
-                ACCESS_CONTROL_REQUEST_METHOD
+                ACCESS_CONTROL_REQUEST_METHOD,
+                ACCESS_CONTROL_ALLOW_HEADERS,
+                ACCESS_CONTROL_REQUEST_HEADERS
 
         ));
         config.setAllowedMethods(Arrays.asList(GET.name(), PUT.name(), POST.name(), DELETE.name()));

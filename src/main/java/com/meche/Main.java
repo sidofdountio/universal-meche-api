@@ -27,7 +27,7 @@ public class Main {
 							 SupplierRepo supplierRepo,
 							 UserService userService) {
 		return args -> {
-			userService.registerAdmin(new RegisterRequest("sidof","universalmeche@gmail.com","universal1"));
+			userService.registerAdmin(new RegisterRequest("Nguesson","universalmeche@gmail.com","universal1"));
 
 			AnotherCharge anotherCharge = anotherChargeRepo.save(new AnotherCharge(null, "", 10, new ArrayList<>()));
 

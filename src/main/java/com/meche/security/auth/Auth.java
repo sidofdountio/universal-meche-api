@@ -6,6 +6,7 @@ import com.meche.security.model.AuthenticationResponse;
 import com.meche.security.model.RegisterRequest;
 import com.meche.security.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @RequestMapping("api/v1/hair/auth")
-@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:80"},maxAge = 3600)
 @RequiredArgsConstructor
 public class Auth {
     private final UserService userService;
@@ -37,10 +38,10 @@ public class Auth {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest authenticationRequest) throws InterruptedException {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) throws InterruptedException {
         AuthenticationResponse authenticate = userService.authenticate(authenticationRequest);
         TimeUnit.SECONDS.sleep(2);
-        return new ResponseEntity<AuthenticationResponse>(authenticate, OK);
+        return new ResponseEntity<AuthenticationResponse>(authenticate, CREATED);
     }
 
     @GetMapping(path = "/isTokenValid/{token}")

@@ -18,15 +18,15 @@ services:
     networks:
       - db
 
-  universalhair:
+  api_hair:
     depends_on:
       - universal_hair_db
-    container_name: universalhairapi
+    container_name: api_hair
     build:
       context: .
       args:
         CONTAINER_PORT: ${CONTAINER_PORT}
-    image: universalhair:v1
+    image: api_hair:v1
     restart: unless-stopped
     env_file:
       - ${ENV_FILE}

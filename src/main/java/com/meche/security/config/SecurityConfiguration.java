@@ -44,6 +44,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authHttpReq -> authHttpReq
                         .requestMatchers("api/v1/hair/auth/**")
                         .permitAll()
+                        .requestMatchers("api/v1/hair/auth/authenticate")
+                        .permitAll()
                         .requestMatchers(GET, "api/v1/hair/user/**").hasAnyAuthority(ROLE_ADMIN.name())
                         .requestMatchers(GET, "api/v1/hair/product/**").hasAnyAuthority(ROLE_ADMIN.name())
                         .requestMatchers(GET, "api/v1/hair/product-category/**").hasAnyAuthority(ROLE_ADMIN.name())
@@ -56,7 +58,6 @@ public class SecurityConfiguration {
                         .requestMatchers(GET, "api/v1/hair/supplier/**").hasAnyAuthority(ROLE_ADMIN.name())
                         .requestMatchers(GET, "api/v1/hair/charge/**").hasAnyAuthority(ROLE_ADMIN.name())
 
-                        .requestMatchers(POST, "api/v1/hair/user/**").hasAnyAuthority(ROLE_ADMIN.name())
                         .requestMatchers(POST, "api/v1/hair/product/**").hasAnyAuthority(ROLE_ADMIN.name())
                         .requestMatchers(POST, "api/v1/hair/product-category/**").hasAnyAuthority(ROLE_ADMIN.name())
                         .requestMatchers(POST, "api/v1/hair/sale/**").hasAnyAuthority(ROLE_ADMIN.name())

@@ -20,8 +20,6 @@ spring:
         format_sql: true
     show-sql: true
 
-
-
 application:
   title: UNIVERSAL HAIR
   version: v1

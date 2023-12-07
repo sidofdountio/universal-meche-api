@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.*;
  */
 @RestController
 @RequestMapping("/api/v1/hair/employee")
-@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:80"},maxAge = 3600)
 @RequiredArgsConstructor
 @Transactional
 public class EmployeeApi {

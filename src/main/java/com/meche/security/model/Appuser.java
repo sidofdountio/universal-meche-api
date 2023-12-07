@@ -35,6 +35,7 @@ public class Appuser implements UserDetails {
     @Id
     private Long id;
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
     @Enumerated(STRING)
@@ -42,7 +43,6 @@ public class Appuser implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "appuser", fetch = EAGER)
     private List<Token> tokens = new ArrayList<>();
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
