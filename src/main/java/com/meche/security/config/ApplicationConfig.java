@@ -53,35 +53,35 @@ public class ApplicationConfig {
         return configuration.getAuthenticationManager();
     }
 
-    @Bean
-    public CorsFilter configurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:80","http://localhost:4200","http://localhost"));
-        config.setAllowCredentials(true);
-        config.setAllowedHeaders(Arrays.asList(
-                ACCEPT,
-                AUTHORIZATION,
-                CONTENT_TYPE,
-                ORIGIN,"Jwt-Token",
-                ACCESS_CONTROL_ALLOW_ORIGIN,
-                ACCESS_CONTROL_REQUEST_METHOD,
-                ACCESS_CONTROL_ALLOW_HEADERS,
-                ACCESS_CONTROL_REQUEST_HEADERS,"X-Requested-With","Origin, Accept"
-        ));
-        config.setExposedHeaders(Arrays.asList(ACCEPT,
-                AUTHORIZATION,
-                CONTENT_TYPE,
-                ORIGIN, ACCESS_CONTROL_ALLOW_ORIGIN,
-                ACCESS_CONTROL_ALLOW_CREDENTIALS,
-                "Jwt-Token","Filename"
-        ));
-        config.setAllowedMethods(Arrays.asList(GET.name(), PUT.name(), POST.name(), DELETE.name()));
-        config.setMaxAge((3600L));
-        config.addAllowedHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN);
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
+//    @Bean
+//    public CorsFilter configurationSource() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowedOrigins(Arrays.asList("http://localhost:80","http://localhost:4200"));
+//        config.setAllowCredentials(true);
+//        config.setAllowedHeaders(Arrays.asList(
+//                ACCEPT,
+//                AUTHORIZATION,
+//                CONTENT_TYPE,
+//                ORIGIN,"Jwt-Token",
+//                ACCESS_CONTROL_ALLOW_ORIGIN,
+//                ACCESS_CONTROL_REQUEST_METHOD,
+//                ACCESS_CONTROL_ALLOW_HEADERS,
+//                ACCESS_CONTROL_REQUEST_HEADERS,"X-Requested-With","Origin, Accept"
+//        ));
+//        config.setExposedHeaders(Arrays.asList(ACCEPT,
+//                AUTHORIZATION,
+//                CONTENT_TYPE,
+//                ORIGIN, ACCESS_CONTROL_ALLOW_ORIGIN,
+//                ACCESS_CONTROL_ALLOW_CREDENTIALS,
+//                "Jwt-Token","Filename"
+//        ));
+//        config.setAllowedMethods(Arrays.asList(GET.name(), PUT.name(), POST.name(), DELETE.name()));
+//        config.setMaxAge((3600L));
+//        config.addAllowedHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN);
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

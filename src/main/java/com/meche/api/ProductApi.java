@@ -19,9 +19,8 @@ import static org.springframework.http.HttpStatus.*;
  */
 @RestController
 @RequestMapping("/api/v1/hair/product")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:80"},maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200",maxAge = 3600,allowedHeaders = "*")
 @RequiredArgsConstructor
-@Slf4j
 public class ProductApi {
     private final ProductService productService;
 

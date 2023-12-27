@@ -24,7 +24,7 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @RequestMapping("api/v1/hair/auth")
-@CrossOrigin(origins = "http://localhost:80",maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200",maxAge = 3600,allowedHeaders = "*")
 @RequiredArgsConstructor
 public class Auth {
     private final UserService userService;

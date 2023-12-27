@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.*;
  */
 @RestController
 @RequestMapping("/api/v1/hair/category")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:80"},maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:80"},maxAge = 3600,allowedHeaders = "*")
 @RequiredArgsConstructor
 public class CategoryTypeAPi {
     private final CategoryTypeService categoryTypeService;
