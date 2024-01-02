@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @RequestMapping("/api/v1/hair/supplier")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:80"},maxAge = 3600)
+@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
 @RequiredArgsConstructor
 @Slf4j
 public class SupplierApi {

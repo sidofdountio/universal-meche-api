@@ -153,6 +153,7 @@ public class InventoryOperation implements StockManager {
         int newQuantity = 0;
 //      Get last pucharse price.
         double newPrice = 0;
+        double newPriceProvided = 0;
         double oldPrice = 0;
         double newAmount = 0;
         double oldAmount = 0;
@@ -174,6 +175,8 @@ public class InventoryOperation implements StockManager {
 //            Object
             Inventory inventoryToAdd = new Inventory();
             quantityProvideByUser = sale.getQuantity();
+            newPriceProvided = sale.getPrice();
+            newPrice = sale.getPrice();
 
             productName = sale.getProduct().getName();
             for (Inventory stockInventoty : inventoryList) {
@@ -184,7 +187,8 @@ public class InventoryOperation implements StockManager {
                 if (productName.equalsIgnoreCase(stockInventoty.getProductName()) && stockInventoty.isUp()) {
 //                  We manage only product that is up.
                     oldPrice = stockInventoty.getOrldPrice();
-                    newPrice = stockInventoty.getNewPrice();//ancien prix calcule apres achat.
+//                    newPrice = stockInventoty.getNewPrice();//ancien prix calcule apres achat.
+
                     oldAmount = quantityProvideByUser * newPrice; // prix calcule
                     newQuantity = stockInventoty.getNewQuantity();
                     newAmount = quantityProvideByUser * newPrice;

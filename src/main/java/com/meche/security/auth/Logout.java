@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @YouTube @sidof8065
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:80"},maxAge = 3600,allowedHeaders = "*")
+@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
 //@RequestMapping("api/v1/store")
 public class Logout {
     @PostMapping("/logout")

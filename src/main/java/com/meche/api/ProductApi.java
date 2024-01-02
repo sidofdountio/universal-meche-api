@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.*;
  */
 @RestController
 @RequestMapping("/api/v1/hair/product")
-@CrossOrigin(origins = "http://localhost:4200",maxAge = 3600,allowedHeaders = "*")
+@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
 @RequiredArgsConstructor
 public class ProductApi {
     private final ProductService productService;
@@ -27,7 +27,6 @@ public class ProductApi {
     @GetMapping
     public ResponseEntity<List<Product>> getProducts() {
         final List<Product> products = productService.getProducts();
-
         return new ResponseEntity<>(products, OK);
     }
 
