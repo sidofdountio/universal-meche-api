@@ -30,7 +30,7 @@ public class ProductService implements ProductDao {
         if (!existProduct) {
             log.error("Product {} not exist", product.getName());
         }
-        return productRepo.saveAndFlush(product);
+        return productRepo.save(product);
     }
 
     @Override

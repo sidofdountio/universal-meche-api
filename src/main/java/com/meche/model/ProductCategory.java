@@ -28,16 +28,11 @@ public class ProductCategory {
     @SequenceGenerator(name = "sequence_id_product_categorie",
             allocationSize = 1,
             sequenceName = "sequence_id_product_categorie")
-    @GeneratedValue(strategy = SEQUENCE,generator = "sequence_id_product_categorie")
+    @GeneratedValue(strategy = SEQUENCE, generator = "sequence_id_product_categorie")
     private Long id;
     private String name;
     @JsonIgnore
     @OneToMany(mappedBy = "productCategory")
     private List<Product> product = new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name = "category_type_id",
-            nullable = true,
-            referencedColumnName = "id",
-    foreignKey = @ForeignKey(name = "product_category_category_type"))
-    private CategoryType categoryType;
+
 }

@@ -53,7 +53,6 @@ public class PurchaseAPI {
     public ResponseEntity<List<Purchase>> getPurchases()
             throws InterruptedException {
         List<Purchase> purchases = purchaseService.PURCHASES();
-        TimeUnit.SECONDS.sleep(3);
         return new ResponseEntity<>(purchases, OK);
     }
 
@@ -122,7 +121,7 @@ public class PurchaseAPI {
             }
         }
 //        updateSalePrice(purchaseSavedProduct);
-        TimeUnit.SECONDS.sleep(1);
+
         return new ResponseEntity<Purchase>(purchaseSaved, CREATED);
     }
 

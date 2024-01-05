@@ -9,15 +9,13 @@ import com.meche.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static java.time.LocalDate.now;
@@ -29,7 +27,7 @@ import static java.time.LocalDate.now;
  * @YouTube @sidof8065
  */
 @Transactional
-@Service
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class InventoryOperation implements StockManager {
@@ -39,7 +37,7 @@ public class InventoryOperation implements StockManager {
 
     /**
      * In this project the new price (That correspond for sale price)
-     * Will be provide by the owner or mananer.
+     * Will be provided by the owner or manager.
      * <p>
      * We check up product on our stock.
      * Up product its doeat who have been save laters(Purchase and sale)
@@ -55,89 +53,108 @@ public class InventoryOperation implements StockManager {
         int day = LocalDate.now().getDayOfMonth();
         Month month = LocalDate.now().getMonth();
         Year year = Year.now();
-        final int quantity = purchase.getQuantity();
+        final int quantityPovider = purchase.getQuantity();
         final double price = purchase.getPrice();
-        final double amount = quantity * price;
+        final double amount = quantityPovider * price;
 
-        final int newQuantity = purchase.getQuantity();
+        int newQuantity = 0;
+        int newQuantityCalculed = 0;
         final double newPrice = purchase.getSalePrice();
         final double newAmount = purchase.getAmount();
         Inventory inventoryToPucharse = new Inventory();
-        final String productName = productById.getName();
+        Inventory inventoryPresentInStock = new Inventory();
+        final String productName = purchase.getProduct().getName();
 //        In this case stock is empty.
+
+        int qty = 0;
+        double amt = 0;
+        Inventory inventoryToAdd = new Inventory();
+        System.out.println("=================================================");
         if (inventoryList.isEmpty()) {
-            Inventory inventoryNew = new Inventory(
+            Inventory inventoryFirst = new Inventory(
                     1L, LocalDateTime.now(),
                     label,
                     productName,
                     true,
-                    quantity,
+                    quantityPovider,
                     price,
                     amount,
-                    quantity,
+                    quantityPovider,
                     newPrice,
                     newAmount,
                     day,
                     month,
                     year
             );
-            //SOME OPERATION (CMUP) Cout Moyen Unitaire Pondere.
-//            We return this object inventoryToPucharse.
-            inventoryToPucharse = inventoryNew;
+            inventoryToPucharse = inventoryFirst;
+
         }
-        int qty = 0;
-        double amt = 0;
-        for (Inventory inventoryToUpdate : inventoryList) {
-            if (inventoryToUpdate.isUp()
-                    && productName.equalsIgnoreCase(inventoryToUpdate.getProductName())) {
-                final double newPriceToAdd = purchase.getSalePrice();
-//                orld quantity + new purchase quantity.
-                qty = inventoryToUpdate.getNewQuantity() + quantity; //calcul de la nouvel quatite.
-                // calcul du nouveau montant.
-                amt = Math.multiplyExact(quantity, (int) newPriceToAdd);
+        boolean productNameExist = false;
+        for (Inventory inventoryStock : inventoryList) {
 
-                Inventory inventoryToAdd = new Inventory();
-//              Firstly set orld values.
-                inventoryToAdd.setLabel(label);
-                inventoryToAdd.setProductName(productName);
-                inventoryToAdd.setDate(LocalDateTime.now());
-                inventoryToAdd.setDay(day);
-                inventoryToAdd.setMonth(month);
-                inventoryToAdd.setYear(year);
+            log.info("all inventory : {}", inventoryStock);
+            log.info("product name : {}", productName);
 
-                inventoryToAdd.setOrldQuantity(quantity);
-                inventoryToAdd.setOrldPrice(price);
-                inventoryToAdd.setOldAmount(amount);
-
-                inventoryToAdd.setNewQuantity(qty);
-                inventoryToAdd.setNewPrice(newPrice);
-                inventoryToAdd.setNewAmount(amt);
-                inventoryToAdd.setUp(true);
-                inventoryToPucharse = inventoryToAdd;
-
-                inventoryToUpdate.setUp(false);
-/**             Depricated */
-                productById.setPrice(newPrice);
-                productService.updateProduct(productById);
-
-            } else {
-                Inventory inventoryNew = new Inventory(
-                        null, LocalDateTime.now(), label, productName, true,
-                        quantity,
-                        price,
-                        amount,
-                        quantity,
-                        newPrice,
-                        newAmount,
-                        day,
-                        month,
-                        year
-                );
-                inventoryToPucharse = inventoryNew;
-                productById.setPrice(newPrice);
-                productService.updateProduct(productById);
+            if (inventoryStock.getProductName().equalsIgnoreCase(productName) && inventoryStock.isUp()) {
+                log.info("inventory  filter 1 : {}", inventoryStock);
+                productNameExist = true;
+                inventoryPresentInStock =  inventoryStock;
+                break;
             }
         }
+        if (productNameExist){
+            log.info("inventory  filter 1 ok : {}", inventoryPresentInStock);
+
+
+            final double newPriceToAdd = purchase.getSalePrice();
+//                orld quantity + new purchase quantity.
+            qty = inventoryPresentInStock.getNewQuantity() + quantityPovider; //calcul de la nouvel quatite.
+            // calcul du nouveau montant.
+            amt = Math.multiplyExact(quantityPovider, (int) newPriceToAdd);
+
+//              Firstly set orld values.
+            inventoryToAdd.setLabel(label);
+            inventoryToAdd.setProductName(productName);
+            inventoryToAdd.setDate(LocalDateTime.now());
+            inventoryToAdd.setDay(day);
+            inventoryToAdd.setMonth(month);
+            inventoryToAdd.setYear(year);
+
+            inventoryToAdd.setOrldQuantity(quantityPovider);
+            inventoryToAdd.setOrldPrice(price);
+            inventoryToAdd.setOldAmount(amount);
+
+            inventoryToAdd.setNewQuantity(qty);
+            inventoryToAdd.setNewPrice(newPrice);
+            inventoryToAdd.setNewAmount(amt);
+            inventoryToAdd.setUp(true);
+            inventoryToPucharse = inventoryToAdd;
+
+            inventoryPresentInStock.setUp(false);
+
+            productById.setPrice(newPrice);
+            productService.updateProduct(productById);
+             inventoryToPucharse = inventoryToAdd;
+
+        }else {
+
+            Inventory inventoryNew = new Inventory(
+                    null, LocalDateTime.now(), label, productName, true,
+                    quantityPovider,
+                    price,
+                    amount,
+                    quantityPovider,
+                    newPrice,
+                    newAmount,
+                    day,
+                    month,
+                    year
+            );
+            inventoryToPucharse = inventoryNew;
+            productById.setPrice(newPrice);
+        }
+
+        System.out.println("=================================================");
         return inventoryToPucharse;
     }
 
@@ -174,7 +191,6 @@ public class InventoryOperation implements StockManager {
 //            Object
             Inventory inventoryToAdd = new Inventory();
             quantityProvideByUser = sale.getQuantity();
-
             productName = sale.getProduct().getName();
             for (Inventory stockInventoty : inventoryList) {
 //            stock product.
@@ -184,7 +200,8 @@ public class InventoryOperation implements StockManager {
                 if (productName.equalsIgnoreCase(stockInventoty.getProductName()) && stockInventoty.isUp()) {
 //                  We manage only product that is up.
                     oldPrice = stockInventoty.getOrldPrice();
-                    newPrice = stockInventoty.getNewPrice();//ancien prix calcule apres achat.
+                    newPrice = sale.getPrice();//ancien prix calcule apres achat.
+
                     oldAmount = quantityProvideByUser * newPrice; // prix calcule
                     newQuantity = stockInventoty.getNewQuantity();
                     newAmount = quantityProvideByUser * newPrice;
@@ -216,6 +233,6 @@ public class InventoryOperation implements StockManager {
             inventoryToCMUSale.add(inventoryToAdd);
         }
         return inventoryToCMUSale;
-
     }
+
 }

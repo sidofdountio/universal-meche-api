@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author sidof
@@ -22,6 +23,12 @@ public class InventoryService implements InventoryDAO {
     @Override
     public List<Inventory> INVENTORY_LIST() {
         return inventoryRepo.findAll();
+    }
+
+    @Override
+    public boolean findByProductName(String productName) {
+        boolean exist = inventoryRepo.existsByProductName(productName);
+        return exist;
     }
 
     @Override

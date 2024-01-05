@@ -20,7 +20,7 @@ import java.util.List;
 
 public interface SaleRepo extends JpaRepository<Sale, Long> {
     @Override
-    @Query("SELECT i FROM Sale i  ORDER BY id ASC")
+    @Query("SELECT i FROM Sale i  ORDER BY i.id desc ")
     List<Sale> findAll();
 
     @Query("SELECT i FROM Sale i WHERE i.month = :month AND i.year = :year ")

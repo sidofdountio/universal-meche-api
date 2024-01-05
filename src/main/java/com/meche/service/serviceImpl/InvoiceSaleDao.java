@@ -1,4 +1,4 @@
-package com.sidof.service.interfaceService;
+package com.meche.service.serviceImpl;
 
 import com.meche.model.InvoiceSale;
 import org.springframework.data.domain.Sort;
@@ -14,15 +14,8 @@ import java.util.List;
  * @YouTube @sidof8065
  */
 public interface InvoiceSaleDao {
-    List<InvoiceSale> getInvoiceSales();
 
-    List<InvoiceSale> getInvoicesSaleBySaleId(Long saleId);
-
-    InvoiceSale getInvoicesSaleByCustormeId(Long custormeId);
-
-    List<InvoiceSale> getInvoicesSaleByCustormeIds(Long custormeId);
-
-    List<InvoiceSale> addInvoiceSale(List<InvoiceSale> invoiceSales);
+    void addInvoiceSale(List<InvoiceSale> invoiceSales);
 //    UPDATE
 
     List<InvoiceSale> findByInvoiceNumber();
