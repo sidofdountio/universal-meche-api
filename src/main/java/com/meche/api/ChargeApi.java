@@ -1,8 +1,6 @@
 package com.meche.api;
 
-import com.meche.model.AnotherCharge;
 import com.meche.model.Charge;
-import com.meche.service.AnotherChargeService;
 import com.meche.service.ChargeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,6 @@ import static org.springframework.http.HttpStatus.OK;
 public class ChargeApi {
 
     private final ChargeService chargeService;
-    private final AnotherChargeService anotherChargeService;
 
     @GetMapping
     public ResponseEntity<List<Charge>> charges() {
@@ -43,14 +40,6 @@ public class ChargeApi {
 
     @PutMapping
     public ResponseEntity<Charge> updateCharge(@RequestBody Charge charge) {
-       var another = new AnotherCharge(
-               charge.getAnotherCharge().getId(),
-               charge.getAnotherCharge().getRaison(),
-               charge.getAnotherCharge().getAmount(),
-               new ArrayList<>()
-       );
-        AnotherCharge anotherChargeUpdated = anotherChargeService.save(another);
-
         Charge updatedCharge = chargeService.update(charge);
         return new ResponseEntity<>(CREATED);
     }

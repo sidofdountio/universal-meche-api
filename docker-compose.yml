@@ -1,8 +1,7 @@
 services:
-  db:
-    container_name: universal_hair_db
+  universal_hair_dv_db:
+    container_name: universal_hair_dv_db
     image: postgres
-
     environment:
       POSTGRES_USER: sidof
       POSTGRES_PASSWORD: sidof1/@
@@ -12,11 +11,11 @@ services:
     ports:
       - "5332:5432"
     networks:
-      - db
+      - universal_hair_dv
     restart: unless-stopped
 
 networks:
-  db:
+  universal_hair_dv:
     driver: bridge
 
 volumes:

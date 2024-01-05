@@ -44,7 +44,6 @@ public class SaleApi {
     @GetMapping
     public ResponseEntity<List<Sale>> getSales() throws InterruptedException {
         final List<Sale> sales = saleService.SALES();
-        TimeUnit.SECONDS.sleep(3);
         return new ResponseEntity<List<Sale>>(sales, OK);
     }
 
@@ -86,7 +85,6 @@ public class SaleApi {
         }
         saleToValid.setStatus(PAID);
         Sale validSale = saleService.updateSale(saleToValid);
-        TimeUnit.SECONDS.sleep(2);
         return new ResponseEntity<>(validSale, CREATED);
     }
 
@@ -100,11 +98,9 @@ public class SaleApi {
     public ResponseEntity<List<Sale>> addSale(@RequestBody List<Sale> saleToSave) throws InterruptedException {
         double total = 0;
         List<InvoiceSale> invoiceSales = new ArrayList<>();
-        final List<Inventory> inventoryList = inventoryService.INVENTORY_LIST();
+        List<Inventory> inventoryList = inventoryService.INVENTORY_LIST();
         final List<Inventory> cmupForSale = inventoryOperation.cmupForSale("SALE", saleToSave, inventoryList);
-        if (cmupForSale == null) {
-            throw new NullPointerException("error");
-        }
+
         Customer customerById = customerService.getCustomerById(saleToSave.get(0).getCustomer().getId());
 //        TODO: I will update this code soon.
 //        calcul the amount of transaction.
@@ -127,7 +123,6 @@ public class SaleApi {
 //        saved sale
         final List<Sale> saleSaved = saleService.saveSale(saleToSave);
         saveInvoiceSale(saleSaved, total, invoiceSales);
-        TimeUnit.SECONDS.sleep(2);
         return new ResponseEntity<>(saleSaved, CREATED);
     }
 

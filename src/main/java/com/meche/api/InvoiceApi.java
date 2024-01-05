@@ -33,7 +33,6 @@ public class InvoiceApi {
     @GetMapping
     public ResponseEntity<List<InvoiceSale>> getInvoiceNumber() throws InterruptedException {
         List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber();
-        TimeUnit.SECONDS.sleep(2);
         return new ResponseEntity<List<InvoiceSale>>(byInvoiceNumber, OK);
     }
 
@@ -44,7 +43,6 @@ public class InvoiceApi {
     public ResponseEntity<List<InvoiceSale>> getInvoiceNumber(@PathVariable("invoiceNumber") String invoicenumber)
             throws InterruptedException {
         List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber(invoicenumber);
-        TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<List<InvoiceSale>>(byInvoiceNumber, OK);
     }
 
@@ -56,7 +54,6 @@ public class InvoiceApi {
             @PathVariable("month") Month month, @PathVariable("year")Year year)
             throws InterruptedException {
         List<InvoiceSale> byMonthAndYear = invoiceSaleService.findByMonthAndYear(month, year, Sort.by("month", "year"));
-        TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<List<InvoiceSale>>(byMonthAndYear, OK);
     }
 

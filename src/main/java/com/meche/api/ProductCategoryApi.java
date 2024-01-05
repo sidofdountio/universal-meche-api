@@ -34,13 +34,7 @@ public class ProductCategoryApi {
     public ResponseEntity<ProductCategory> createProductCategory(@RequestBody ProductCategory productCategory)
             throws InterruptedException {
         try {
-            if (productCategory.getCategoryType().getId() == null) {
-                var categori = ProductCategory.builder()
-                        .name(productCategory.getName())
-                        .categoryType(null)
-                        .build();
-                return new ResponseEntity(productCategoryService.save(categori), CREATED);
-            }
+
             ProductCategory savedProductCategory = productCategoryService.save(productCategory);
             return new ResponseEntity(savedProductCategory, CREATED);
         } catch (IllegalStateException e) {

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author sidof
@@ -15,6 +16,10 @@ import java.util.List;
  */
 public interface InventoryRepo extends JpaRepository<Inventory, Long> {
     @Override
-    @Query("SELECT i FROM Inventory i  ORDER BY id")
+    @Query("SELECT i FROM Inventory i  ORDER BY i.id desc ")
     List<Inventory> findAll(Sort sort);
+
+    boolean existsByProductName(String productName);
+
+
 }

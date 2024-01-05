@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -40,7 +41,10 @@ public class ProductApi {
 
     @PostMapping
     public ResponseEntity<Product> saveProduct(@RequestBody Product productToSave) {
-
+        if (productToSave.getCode().equals("")){
+            String code = UUID.randomUUID().toString().substring(0, 10);
+            productToSave.setCode(code);
+        }
         final Product product = productService.addProduct(productToSave);
         return new ResponseEntity<>(product, CREATED);
     }

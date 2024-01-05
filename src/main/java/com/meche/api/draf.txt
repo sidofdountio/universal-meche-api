@@ -1,0 +1,47 @@
+for (Sale sale : sales) {
+            quantityProvideByUser = sale.getQuantity();
+            productName = sale.getProduct().getName();
+            log.info(" sale item :{}", sale);
+            for (Inventory stockInventory : inventoryList) {
+//            stock product.
+                if (stockInventory.getProductName().equalsIgnoreCase(productName) && stockInventory.isUp()) {
+                    if (stockInventory.getNewQuantity() < quantityProvideByUser) {
+                        throw new IllegalStateException("Quantity in store it's less thant provider");
+                    }
+                    log.info(" quantity {}", stockInventory.getNewQuantity());
+                    log.info(" product present in stock :{}", stockInventory.getProductName());
+//                  We manage only product that is up.
+//                    oldPrice = stockInventory.getOrldPrice();
+////                    newPrice = stockInventory.getNewPrice();//ancien prix calcule apres achat.
+//                    newPrice = sale.getPrice();//ancien prix calcule apres achat.
+//                    oldAmount = quantityProvideByUser * newPrice; // prix calcule
+//                    newQuantity = stockInventory.getNewQuantity();
+//                    newAmount = quantityProvideByUser * newPrice;
+//                    quantity = newQuantity - quantityProvideByUser;
+//                    inventoryToAdd.setLabel(label);
+//                    inventoryToAdd.setOrldQuantity(quantityProvideByUser);
+//                    inventoryToAdd.setOrldPrice(newPrice);// ancien nouveau prix calcule apre achat.
+//                    inventoryToAdd.setOldAmount(oldAmount);
+//
+//                    inventoryToAdd.setNewQuantity(quantity);
+//                    inventoryToAdd.setNewPrice(newPrice);
+//                    inventoryToAdd.setNewAmount(newAmount);
+//                    inventoryToAdd.setProductName(productName);
+//                    inventoryToAdd.setDate(LocalDateTime.now());
+//                    inventoryToAdd.setYear(year);
+//                    inventoryToAdd.setMonth(month);
+//                    inventoryToAdd.setDay(day);
+//
+//                    inventoryToAdd.setUp(true);
+////                  Turn the position of last product to false
+//                    stockInventory.setUp(false);
+////                    Update change of inventory after seller.
+////                    Save the change mind save the new quantity that reduce
+//                    inventoryService.updateInventory(stockInventory);
+//                    // Add to list CMUP
+//                    inventoryToCMUSale.add(inventoryToAdd);
+                }else {
+                    throw new IllegalStateException("No up product in the stock");
+                }
+            }
+        }

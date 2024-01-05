@@ -21,38 +21,62 @@ public class Main {
     }
 
     @Bean
-    CommandLineRunner runner(AnotherChargeRepo anotherChargeRepo,
-                             ChargeRepo chargeRepo,
-                             CustomerRepo customerRepo,
-                             ProductCategoryRepo productCategoryRepo,
-                             ProductRepo productRepo,
-                             SupplierRepo supplierRepo) {
+    CommandLineRunner runner(
+            CustomerRepo customerRepo,
+            ProductCategoryRepo productCategoryRepo,
+            ProductRepo productRepo,
+            SupplierRepo supplierRepo) {
         return args -> {
-            AnotherCharge anotherCharge = anotherChargeRepo.save(new AnotherCharge(null, "", 10, new ArrayList<>()));
 
-            var charge = Charge.builder()
-                    .anotherCharge(anotherCharge)
-                    .impot(10)
-                    .loyer(12)
-                    .electricity(4)
-                    .totalSalary(23)
-                    .transport(25)
-                    .ration(23)
-                    .build();
-            chargeRepo.save(charge);
 
             customerRepo.save(new Customer(
                     null,
-                    "unknow",
+                    "John",
                     "unknow",
                     "unknow",
                     "unknow",
                     new ArrayList<>(),
                     new ArrayList<>()));
-            ProductCategory productCategory = productCategoryRepo.save(new ProductCategory(null, "Naturelle", new ArrayList<>(), null));
-            productRepo.save(new Product(null,"Star Africa","noir",2,0,"Description",100,"code",new ArrayList<>(),null,null,productCategory));
 
-            supplierRepo.save(new Supplier(null,"Max","max@gmail.com","67828929","Yaounde",new ArrayList<>()));
+            ProductCategory productCategory = productCategoryRepo.save(new ProductCategory(
+                    1L,
+                    "Meche",
+                    new ArrayList<>()
+                    ));
+            ProductCategory productCategory2 = productCategoryRepo.save(new ProductCategory(
+                    2L,
+                    "Savon",
+                    new ArrayList<Product>()
+                    ));
+
+            productRepo.save(new Product(1L,
+                    "Star Africa",
+                    "noir",
+                    0,
+                    1500,
+                    "Description",
+                    900,
+                    "codeSA",
+                    new ArrayList<Purchase>(),
+                   null,
+                    null,
+                    productCategory,
+                    ""));
+            productRepo.save(new Product(2L,
+                    "Jazz",
+                    "",
+                    0,
+                    500,
+                    "",
+                    250,
+                    "codeJa",
+                    new ArrayList<Purchase>(),
+                    null,
+                    null,
+                    productCategory2,
+                    ""));
+
+            supplierRepo.save(new Supplier(null, "Max", "max@gmail.com", "67828929", "Yaounde", new ArrayList<>()));
         };
     }
 

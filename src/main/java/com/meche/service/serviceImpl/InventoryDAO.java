@@ -17,4 +17,5 @@ public interface InventoryDAO {
     Inventory saveInventory(Inventory inventory);
     List<Inventory> saveSaleInventory(List<Inventory> inventories);
     Inventory updateInventory(Inventory inventory);
+    boolean findByProductName(String productName);
 }

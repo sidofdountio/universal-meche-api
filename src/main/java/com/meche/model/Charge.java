@@ -34,10 +34,7 @@ public class Charge {
     private double  loyer;
     private double  transport;
     private double  ration;
-    @ManyToOne
-    @JoinColumn(name = "another_charge_id",
-            referencedColumnName = "id",nullable = true)
-    private AnotherCharge anotherCharge;
+
 
 
 }

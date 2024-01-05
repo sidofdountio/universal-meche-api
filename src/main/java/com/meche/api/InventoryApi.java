@@ -26,7 +26,7 @@ public class InventoryApi {
     @GetMapping
     public ResponseEntity<List<Inventory>> getInventory() throws InterruptedException {
         List<Inventory> inventories = inventoryService.getInventories(Sort.by("id"));
-        TimeUnit.SECONDS.sleep(2);
+
         return new ResponseEntity<List<Inventory>>(inventories,OK);
     }
 

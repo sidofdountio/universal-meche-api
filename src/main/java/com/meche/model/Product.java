@@ -56,4 +56,5 @@ public class Product {
     @JoinColumn(name = "product_category_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "product_category"))
     private ProductCategory productCategory;
+    private String volume;
 }
