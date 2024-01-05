@@ -1,6 +1,7 @@
 package com.meche.repo;
 
 import com.meche.model.Inventory;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,20 +10,16 @@ import java.util.Optional;
 
 /**
  * @Author sidof
- * @Since 20/05/2023
+ * @Since 30/11/2023
+ * @Version v1.0
+ * @YouTube @sidof8065
  */
 public interface InventoryRepo extends JpaRepository<Inventory, Long> {
-    @Query(value = "SELECT u FROM Inventory u")
-    List<Inventory> findAllInventoryList();
-
     @Override
-    @Query("SELECT i FROM Inventory i  ORDER BY id")
-    List<Inventory> findAll();
+    @Query("SELECT i FROM Inventory i  ORDER BY i.id desc ")
+    List<Inventory> findAll(Sort sort);
 
-    Optional<Inventory> findByProductNameAndUp(String productName, boolean isUp);
+    boolean existsByProductName(String productName);
 
-    List<Inventory> findAllByProductName(String productName);
-
-    Optional<Inventory> findInventoryByProductName(String productName);
 
 }

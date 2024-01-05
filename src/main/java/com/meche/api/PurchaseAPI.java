@@ -38,7 +38,7 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @RequestMapping("/api/v1/hair/purchase")
-@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
 @RequiredArgsConstructor
 @Transactional
 public class PurchaseAPI {
@@ -53,7 +53,6 @@ public class PurchaseAPI {
     public ResponseEntity<List<Purchase>> getPurchases()
             throws InterruptedException {
         List<Purchase> purchases = purchaseService.PURCHASES();
-        TimeUnit.SECONDS.sleep(3);
         return new ResponseEntity<>(purchases, OK);
     }
 
@@ -122,12 +121,10 @@ public class PurchaseAPI {
             }
         }
 //        updateSalePrice(purchaseSavedProduct);
-        TimeUnit.SECONDS.sleep(1);
+
         return new ResponseEntity<Purchase>(purchaseSaved, CREATED);
     }
-
     private void updateSalePrice(Product purchaseSavedProduct) {
         productService.updateProduct(purchaseSavedProduct);
     }
-
 }

@@ -3,9 +3,9 @@ package com.meche.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +22,17 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 public class ProductCategory {
     @Id
-    @SequenceGenerator(name = "sequence_id_employee",allocationSize = 1,sequenceName = "sequence_id_employee") @GeneratedValue(strategy = SEQUENCE,generator = "sequence_id_employee")
+    @SequenceGenerator(name = "sequence_id_product_categorie",
+            allocationSize = 1,
+            sequenceName = "sequence_id_product_categorie")
+    @GeneratedValue(strategy = SEQUENCE, generator = "sequence_id_product_categorie")
     private Long id;
     private String name;
     @JsonIgnore
     @OneToMany(mappedBy = "productCategory")
     private List<Product> product = new ArrayList<>();
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "category_type_id",nullable = true,referencedColumnName = "id")
-//    private CategoryType categoryType;
+
 }

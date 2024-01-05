@@ -7,7 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 /**
  * @Author sidof
@@ -17,12 +21,17 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1/hair/charge")
-@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
 @RequiredArgsConstructor
 public class ChargeApi {
 
     private final ChargeService chargeService;
 
+    @GetMapping
+    public ResponseEntity<List<Charge>> charges() {
+        List<Charge> charges = chargeService.getCharges();
+        return new ResponseEntity<List<Charge>>(charges,OK);
+    }
     @PostMapping
     public ResponseEntity<Charge> saveCharge(@RequestBody Charge charge) {
         Charge savedCharge = chargeService.save(charge);
@@ -32,12 +41,11 @@ public class ChargeApi {
     @PutMapping
     public ResponseEntity<Charge> updateCharge(@RequestBody Charge charge) {
         Charge updatedCharge = chargeService.update(charge);
-        return ResponseEntity.ok(updatedCharge);
+        return new ResponseEntity<>(CREATED);
     }
-
-    @GetMapping
-    public List<Charge> getAllCharges() {
-        return chargeService.getCharges();
+    @GetMapping("/{id}")
+    public ResponseEntity<Charge>getCharge(@PathVariable("id")Long id) {
+        return new ResponseEntity<>(chargeService.getCharge(id), OK);
     }
 
     @DeleteMapping("/{id}")

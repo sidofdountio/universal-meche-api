@@ -24,58 +24,38 @@ import java.util.List;
 public class InvoiceSaleService implements InvoiceSaleDao {
     private final InvoiceSaleRepo invoiceSaleRepo;
 
+
     @Override
-    public List<InvoiceSale> getInvoiceSales() {
-        log.info("Fetching  sale invoice.");
+    public void addInvoiceSale(List<InvoiceSale> invoiceSale) {
+        log.info("saved new invoice sale.");
+        invoiceSaleRepo.saveAll(invoiceSale);
+    }
+
+    /**
+     * NEW approaches to retrieving data
+     */
+    @Override
+    public List<InvoiceSale> findByInvoiceNumber() {
+        log.info("Fetching Invoice Sale By Invoice number .");
+//        return invoiceSaleRepo.findDistinctInvoiceNumber();
         return invoiceSaleRepo.findAll();
     }
 
     @Override
-    public List<InvoiceSale> addInvoiceSale(List<InvoiceSale> invoiceSale) {
-        log.info("saved new invoice sale.");
-        return invoiceSaleRepo.saveAll(invoiceSale);
-    }
-
-    @Override
-    public List<InvoiceSale> getInvoicesSaleBySaleId(Long saleId) {
-        List<InvoiceSale> bySaleId = invoiceSaleRepo.findBySaleId(saleId);
-        log.info("Fetching  invoice sale saleId : {}.", saleId);
-        return bySaleId;
-    }
-
-
-    @Override
-    public List<InvoiceSale> getInvoicesSaleByCustormeIds(Long custormeId) {
-        log.info("Fetching invoice sale by {}", custormeId);
-        return invoiceSaleRepo.findAllByCustomerId(custormeId);
-    }
-
-    @Override
-    public InvoiceSale getInvoicesSaleByCustormeId(Long custormeId) {
-        log.info("Fetching invoice sale by {}", custormeId);
-        return null;
-    }
-
-    /**
-     * NEW aproches to retriving data
-     */
-
-
-    @Override
-    public List<InvoiceSale> findByInvoiceNumber(String invoiceNumber) {
-        log.info("Fectching Invoice Sale By Invoice number {} .", invoiceNumber);
-        return invoiceSaleRepo.findByInvoiceNumber(invoiceNumber);
+    public List<InvoiceSale> findByInvoiceNumber(String invoicenumber) {
+        log.info("Fetching Invoice Sale By Invoice number {} .", invoicenumber);
+        return invoiceSaleRepo.findByInvoiceNumber(invoicenumber);
     }
 
     @Override
     public List<InvoiceSale> findByMonthAndYear(Month month, Year year, Sort sort) {
-        log.info("Fectching Invoice Sale By month {} and year {} .", month, year);
+        log.info("Fetching Invoice Sale By month {} and year {} .", month, year);
         return invoiceSaleRepo.findByMonthAndYear(month, year, sort.ascending());
     }
 
     @Override
     public List<InvoiceSale> findByDayAndMonth(int day, Month month, Sort sort) {
-        log.info("Fectching Invoice Sale By day {} and month {} .", day, month);
+        log.info("Fetching Invoice Sale By day {} and month {} .", day, month);
         return invoiceSaleRepo.findByDayAndMonth(day, month, sort.ascending());
     }
 }

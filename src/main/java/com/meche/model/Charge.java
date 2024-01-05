@@ -1,12 +1,14 @@
 package com.meche.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 /**
@@ -20,7 +22,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @Builder
 @Entity
-
 public class Charge {
     @Id
     @SequenceGenerator(name = "sequence_id_charge",
@@ -31,14 +32,10 @@ public class Charge {
     private Long id;
     private double totalSalary;
     private double impot;
-    private double  electricity;
-    private double  loyer;
-    private double  transport;
-    private double  ration;
-    @ManyToOne(fetch =  FetchType.EAGER)
-    @JoinColumn(name = "another_charge_id",
-            referencedColumnName = "id",nullable = true)
-    private AnotherCharge anotherCharge;
+    private double electricity;
+    private double loyer;
+    private double transport;
+    private double ration;
 
 
 }

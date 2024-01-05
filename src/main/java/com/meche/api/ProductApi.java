@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -19,14 +20,16 @@ import static org.springframework.http.HttpStatus.*;
  */
 @RestController
 @RequestMapping("/api/v1/hair/product")
-@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
 @RequiredArgsConstructor
+@Slf4j
 public class ProductApi {
     private final ProductService productService;
 
     @GetMapping
     public ResponseEntity<List<Product>> getProducts() {
         final List<Product> products = productService.getProducts();
+
         return new ResponseEntity<>(products, OK);
     }
 
@@ -38,6 +41,10 @@ public class ProductApi {
 
     @PostMapping
     public ResponseEntity<Product> saveProduct(@RequestBody Product productToSave) {
+        if (productToSave.getCode().equals("")){
+            String code = UUID.randomUUID().toString().substring(0, 10);
+            productToSave.setCode(code);
+        }
         final Product product = productService.addProduct(productToSave);
         return new ResponseEntity<>(product, CREATED);
     }

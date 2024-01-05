@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.CREATED;
  */
 @RestController
 @RequestMapping("/api/v1/hair/product-category")
-@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
 @RequiredArgsConstructor
 public class ProductCategoryApi {
 
@@ -34,6 +34,7 @@ public class ProductCategoryApi {
     public ResponseEntity<ProductCategory> createProductCategory(@RequestBody ProductCategory productCategory)
             throws InterruptedException {
         try {
+
             ProductCategory savedProductCategory = productCategoryService.save(productCategory);
             return new ResponseEntity(savedProductCategory, CREATED);
         } catch (IllegalStateException e) {

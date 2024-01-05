@@ -3,13 +3,15 @@ package com.meche.api;
 import com.meche.model.Inventory;
 import com.meche.service.InventoryService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 /**
@@ -19,26 +21,17 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @RequestMapping("/api/v1/hair/inventory")
-@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
 @RequiredArgsConstructor
 public class InventoryApi {
     private final InventoryService inventoryService;
 
     @GetMapping
-    public ResponseEntity<List<Inventory>> getInventory() {
-        final List<Inventory> inventories = inventoryService.INVENTORIES();
-        return new ResponseEntity<>(inventories, OK);
+    public ResponseEntity<List<Inventory>> getInventory() throws InterruptedException {
+        List<Inventory> inventories = inventoryService.getInventories(Sort.by("id"));
+
+        return new ResponseEntity<List<Inventory>>(inventories, OK);
     }
 
-    @PostMapping("/addInventory")
-    public ResponseEntity<Inventory> saveInventory(@RequestBody Inventory inventoryTosave) {
-        var inventory = inventoryService.addInventory(inventoryTosave);
-        return new ResponseEntity<>(inventory, CREATED);
-    }
 
-    @PutMapping("/updateInventory")
-    public ResponseEntity<Inventory> UpdateInventory(@RequestBody Inventory inventoryToEdit) {
-        var inventory = inventoryService.addInventory(inventoryToEdit);
-        return new ResponseEntity<>(inventory, CREATED);
-    }
 }

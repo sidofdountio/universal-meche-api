@@ -20,11 +20,9 @@ import java.util.List;
 
 public interface SaleRepo extends JpaRepository<Sale, Long> {
     @Override
-    @Query("SELECT i FROM Sale i  ORDER BY id ASC")
+    @Query("SELECT distinct i FROM Sale i  ORDER BY i.id desc")
     List<Sale> findAll();
 
-    //    @Query("SELECT i FROM InvoiceSale i WHERE i.invoiceNumber = :invoiceNumber")
-//    List<Sale> findByInvoiceNumber(@Param("invoiceNumber")String invoiceNumber);
     @Query("SELECT i FROM InvoiceSale i WHERE i.month = :month AND i.year = :year ")
     List<Sale> findByMonthAndYear(@Param("month") Month month, @Param("year") Year year, Sort sort);
     @Query("SELECT i FROM InvoiceSale i WHERE i.day = :day AND i.month = :month ")

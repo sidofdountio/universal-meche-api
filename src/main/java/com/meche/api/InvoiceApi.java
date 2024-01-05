@@ -22,8 +22,8 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @RequestMapping("/api/v1/hair/invoice")
+@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*",maxAge = 3600,allowedHeaders = "*")
 public class InvoiceApi {
     private final InvoiceSaleService invoiceSaleService;
 
@@ -32,8 +32,7 @@ public class InvoiceApi {
      */
     @GetMapping
     public ResponseEntity<List<InvoiceSale>> getInvoiceNumber() throws InterruptedException {
-        List<InvoiceSale> byInvoiceNumber = invoiceSaleService.getInvoiceSales();
-        TimeUnit.SECONDS.sleep(2);
+        List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber();
         return new ResponseEntity<List<InvoiceSale>>(byInvoiceNumber, OK);
     }
 
@@ -44,7 +43,6 @@ public class InvoiceApi {
     public ResponseEntity<List<InvoiceSale>> getInvoiceNumber(@PathVariable("invoiceNumber") String invoicenumber)
             throws InterruptedException {
         List<InvoiceSale> byInvoiceNumber = invoiceSaleService.findByInvoiceNumber(invoicenumber);
-        TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<List<InvoiceSale>>(byInvoiceNumber, OK);
     }
 
@@ -56,7 +54,6 @@ public class InvoiceApi {
             @PathVariable("month") Month month, @PathVariable("year") Year year)
             throws InterruptedException {
         List<InvoiceSale> byMonthAndYear = invoiceSaleService.findByMonthAndYear(month, year, Sort.by("month", "year"));
-        TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<List<InvoiceSale>>(byMonthAndYear, OK);
     }
 
