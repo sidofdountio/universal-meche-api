@@ -181,6 +181,7 @@ public class InventoryOperation implements StockManager {
         Long productId = 0L;
         String productName = "";
 
+
 //      Ensure that with have alredy purchase.
         if (inventoryList.isEmpty()) {
             throw new IllegalStateException("We can't perform this action. First purchase this product");
