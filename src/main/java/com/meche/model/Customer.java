@@ -27,9 +27,8 @@ public class Customer {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @Column(unique = true,nullable = true)
     private String email;
-    @Column(unique = true,nullable = false)
+
     private String phone;
     private String  address;
     @JsonIgnore

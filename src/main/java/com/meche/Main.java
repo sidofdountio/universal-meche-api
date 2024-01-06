@@ -19,8 +19,7 @@ public class Main {
 	}
 
 	@Bean
-	CommandLineRunner runner(
-							 ChargeRepo chargeRepo,
+	CommandLineRunner runner(ChargeRepo chargeRepo,
 							 CustomerRepo customerRepo,
 							 ProductCategoryRepo productCategoryRepo,
 							 ProductRepo productRepo,
@@ -31,17 +30,13 @@ public class Main {
 					"universalmeche@gmail.com","universal1"));
 
 			customerRepo.save(new Customer(
-					null,
-					"unknow",
-					"unknow",
-					"unknow",
-					"unknow",
+					null, "Alex", "", "", "",
 					new ArrayList<>(),
 					new ArrayList<>()));
 			ProductCategory productCategory = productCategoryRepo.save(new ProductCategory(null, "Naturelle", new ArrayList<>()));
-			productRepo.save(new Product(null,"Star Africa","","",0,"Description",100,"code",new ArrayList<>(),null,null,productCategory));
+			productRepo.save(new Product(null,"Star Africa","",0,0,"Description",100,"code",new ArrayList<>(),null,null,productCategory,""));
 
-			supplierRepo.save(new Supplier(null,"Fournisseur","max@gmail.com","67828929","Yaounde",new ArrayList<>()));
+			supplierRepo.save(new Supplier(null,"Fournisseur","","","Yaounde",new ArrayList<>()));
 		};
 	}
 

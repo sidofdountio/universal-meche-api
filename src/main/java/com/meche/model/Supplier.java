@@ -26,9 +26,7 @@ public class Supplier {
     @SequenceGenerator(name = "sequence_id_supplier",allocationSize = 1,sequenceName = "sequence_id_supplier") @GeneratedValue(strategy = SEQUENCE,generator = "sequence_id_supplier")
     private Long id;
     private String name;
-    @Column(unique = true,nullable = true)
     private String email;
-    @Column(unique = true)
     private String phone;
     @Column(nullable = true)
     private String  address;
