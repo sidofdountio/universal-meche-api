@@ -6,11 +6,13 @@ import com.meche.model.*;
 import com.meche.service.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.*;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +34,7 @@ import static org.springframework.http.HttpStatus.*;
 @CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class SaleApi {
     private final SaleService saleService;
     private final ProductService productService;
@@ -53,15 +56,27 @@ public class SaleApi {
         TimeUnit.SECONDS.sleep(1);
         return ResponseEntity.ok(sale);
     }
+
     /**
      * By Month and Year parameter
      */
     @GetMapping("/month/{month}/{year}")
     public ResponseEntity<List<Sale>> getSaleByMonthAndYear(
-            @PathVariable("month") Month month, @PathVariable("year") Year year)
+            @PathVariable("month") String month, @PathVariable("year") Year year)
             throws InterruptedException {
-        List<Sale> byMonthAndYear = saleService.findByMonthAndYear(month, year, Sort.by("month", "year"));
-        TimeUnit.SECONDS.sleep(1);
+        List<Sale> byMonthAndYear = new ArrayList<>();
+        year = Year.now();
+        if (month.equalsIgnoreCase("null")) {
+            log.info("First Filter");
+            month = String.valueOf(LocalDateTime.now().getMonth());
+            Month monthProvide = LocalDateTime.now().getMonth();
+
+            byMonthAndYear = saleService.findByMonthAndYear(monthProvide, year, Sort.by("month", "year"));
+        } else {
+            log.info(" else First Filter");
+            Month monthProvide = Month.valueOf(month);
+            byMonthAndYear = saleService.findByMonthAndYear(monthProvide, year, Sort.by("month", "year"));
+        }
         return new ResponseEntity<List<Sale>>(byMonthAndYear, OK);
     }
 
@@ -89,7 +104,7 @@ public class SaleApi {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>delete(@PathVariable("id")Long id){
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         saleService.deleteSale(id);
         return new ResponseEntity<>(NO_CONTENT);
     }
@@ -108,7 +123,7 @@ public class SaleApi {
             total += sale.getAmount();
         }
 //        Fill and save Transaction.
-        Transaction transactionSaved = saveTransaction(saleToSave, total,customerById);
+        Transaction transactionSaved = saveTransaction(saleToSave, total, customerById);
 //        save inventory.
         List<Inventory> inventoriesSaved = inventoryService.saveSaleInventory(cmupForSale);
 //        Fil and save Sale.
@@ -142,7 +157,7 @@ public class SaleApi {
     }
 
 
-    private Transaction saveTransaction(List<Sale> saleToSave, double total,Customer customer) {
+    private Transaction saveTransaction(List<Sale> saleToSave, double total, Customer customer) {
         var transaction = Transaction.builder()
                 .amount(total)
                 .id(null)
