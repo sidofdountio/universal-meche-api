@@ -59,10 +59,20 @@ public class SaleApi {
      */
     @GetMapping("/month/{month}/{year}")
     public ResponseEntity<List<Sale>> getSaleByMonthAndYear(
-            @PathVariable("month") Month month, @PathVariable("year") Year year)
+            @PathVariable("month") String month, @PathVariable("year") Year year)
             throws InterruptedException {
-        List<Sale> byMonthAndYear = saleService.findByMonthAndYear(month, year, Sort.by("month", "year"));
-        TimeUnit.SECONDS.sleep(1);
+        List<Sale> byMonthAndYear = new ArrayList<>();
+        year = Year.now();
+        if (month.equalsIgnoreCase("null")) {
+
+            month = String.valueOf(LocalDateTime.now().getMonth());
+            Month monthProvide = LocalDateTime.now().getMonth();
+
+            byMonthAndYear = saleService.findByMonthAndYear(monthProvide, year, Sort.by("month", "year"));
+        } else {
+            Month monthProvide = Month.valueOf(month);
+            byMonthAndYear = saleService.findByMonthAndYear(monthProvide, year, Sort.by("month", "year"));
+        }
         return new ResponseEntity<List<Sale>>(byMonthAndYear, OK);
     }
 
